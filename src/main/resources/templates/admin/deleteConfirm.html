@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin delete</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card mt-5">
+                <div class="card-header text-center">
+                    <h3>CONFIRM DELETE</h3>
+                </div>
+                <div class="card-body">
+                    <form action="/submit_delete" method="post">
+                        
+                         Bạn có thực sự muốn xóa admin với username:<p th:text="${admin.Username}"></p> 
+<div class="form-group">
+                            <label for="ID">ID</label>
+                            <input th:value="${admin.ID}" type="number" class="form-control" name="ID" required/>
+                        </div>
+                        <div class="form-group">
+                            <label for="username">Username</label>
+                            <input th:value="${admin.Username}" type="text" class="form-control" name="username" required/>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input th:value="${admin.Password}" type="text" class="form-control" name="password" required/>
+                        <div class="form-group">
+                            <label for="name"> Name:</label>
+                            <input th:value="${admin.Name}" type="text" class="form-control" name="name" required/>                         
+                        <button type="submit" class="btn btn-danger btn-block">Xóa</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
