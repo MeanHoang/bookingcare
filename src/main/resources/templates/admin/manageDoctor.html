@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trang Chủ</title>
+    <!-- Thêm liên kết đến Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    
+    <style>
+        /* Tùy chỉnh logo */
+        .navbar-brand {
+            font-size: 30px;
+            font-weight: bold;
+            color: #00bcd4;
+            padding: 20px 0;
+            text-align: center;
+        }
+        .navbar-brand span {
+            color: #ff9800;
+        }
+
+        /* Đặt thanh nav nằm dọc */
+        .navbar-vertical {
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 250px;
+            background-color: #f8f9fa;
+            box-shadow: 4px 0px 15px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .navbar-nav .nav-link {
+            font-size: 18px;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #333;
+        }
+        .navbar-nav .nav-link:hover {
+            background-color: #00bcd4;
+            color: #fff;
+            border-radius: 5px;
+        }
+        .navbar-nav .nav-link.active {
+            background-color: #ff9800;
+            color: #fff;
+            font-weight: bold;
+            border-radius: 5px;
+        }
+
+		 /* Nội dung chính */
+        .content {
+            margin-left: 270px;
+            padding: 20px;
+        }
+
+        /* Tùy chỉnh form tìm kiếm */
+        .search-form {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .search-form input {
+            width: 75%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            margin-right: 10px;
+        }
+        .search-form button {
+            background-color: #00bcd4;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .search-form button:hover {
+            background-color: #0097a7;
+        }
+
+        /* Nút thêm mới bác sĩ */
+        .add-doctor-btn {
+            background-color: #4caf50;
+            color: white;
+            border-radius: 5px;
+            padding: 10px 20px;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+        .add-doctor-btn:hover {
+            background-color: #388e3c;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Thanh điều hướng dọc -->
+    <nav class="navbar navbar-light bg-light navbar-vertical">
+        <div class="container-fluid flex-column">
+            <a class="navbar-brand" href="#">
+                <span>Admin</span>Care
+            </a>
+            <ul class="navbar-nav flex-column mt-3">
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/trang-chu">
+                        <i class="bi bi-house-door"></i> Trang chủ
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/co-so-y-te">
+                        <i class="bi bi-hospital"></i> Quản lý cơ sở y tế
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/chuyen-khoa">
+                        <i class="bi bi-journal-medical"></i> Quản lý chuyên khoa
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="/admin/quan-ly-bac-sy">
+                        <i class="bi bi-person-badge"></i> Quản lý bác sĩ
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/giao-dich">
+                        <i class="bi bi-credit-card"></i> Quản lý giao dịch
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/doanh-thu">
+                        <i class="bi bi-bar-chart"></i> Doanh thu
+                    </a>
+                </li>
+                <li class="nav-item mt-auto">
+                    <a class="nav-link text-danger" href="/admin/dang-xuat">
+                        <i class="bi bi-box-arrow-right"></i> Đăng xuất
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Nội dung trang -->
+    <div class="content container mt-5">
+
+        <!-- Form tìm kiếm bác sĩ -->
+        <form method="get" action="/admin/quan-ly-bac-sy" class="search-form">
+            <input type="text" name="search" class="form-control" placeholder="Tìm kiếm bác sĩ..." value="" aria-label="Search">
+            <button type="submit" class="btn">Tìm kiếm</button>
+        </form>
+
+        <!-- Nút thêm mới bác sĩ -->
+        <a href="/admin/them-bac-sy" class="add-doctor-btn mb-3">Thêm mới bác sĩ</a>
+
+        <!-- Bảng danh sách bác sĩ -->
+        <h2 class="mt-4">Danh sách Bác sĩ</h2>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Tên Bác sĩ</th>
+                    <th scope="col">Chuyên Môn</th>
+                    <th scope="col">Số điện thoại</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Giới tính</th>
+                    <th scope="col">Kinh nghiệm</th>
+                    <th scope="col">Thao tác</th>
+                </tr>
+            </thead>
+			<tbody>
+			    <tr th:if="${#lists.isEmpty(doctors)}">
+			        <td colspan="8" class="text-center">Không có bác sĩ nào được tìm thấy</td>
+			    </tr>
+			    <tr th:each="doctor : ${doctors}">
+			        <td th:text="${doctor.id}"></td>
+			        <td th:text="${doctor.fullname}"></td>
+			        <td th:text="${doctor.position}"></td>
+			        <td th:text="${doctor.phonenumber}"></td>
+			        <td th:text="${doctor.email}"></td>
+			        <td th:text="${doctor.gender}"></td>
+			        <td th:text="${doctor.experience}"></td>
+			        <td>
+			            <a th:href="@{/admin/sua-bac-sy/{id}(id=${doctor.id})}" class="btn btn-warning btn-sm">Sửa</a>
+			            <a th:href="@{/admin/xoa-bac-sy/{id}(id=${doctor.id})}" class="btn btn-danger btn-sm">Xóa</a>
+			        	<a th:href="@{/admin/thong-tin-bac-sy/{id}(id=${doctor.id})}" class="btn btn-info btn-sm">Thông tin</a>
+			        	
+			        </td>
+			    </tr>
+			</tbody>
+
+        </table>
+        
+    	</div>
+
+    <!-- Thêm liên kết đến Bootstrap JS và Popper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -10,6 +10,8 @@ public interface DoctorService {
 	// Lấy danh sách tất cả các bác sĩ
 	List<Doctor> getAllDoctors();
 
+	List<Doctor> getAllDoctorsWithPage(int pageNumber, int pageSize);
+
 	// Thêm bác sĩ mới
 	void addDoctor(Doctor doctor) throws SQLException;
 

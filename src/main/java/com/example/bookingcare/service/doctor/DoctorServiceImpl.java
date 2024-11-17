@@ -318,4 +318,73 @@ public class DoctorServiceImpl implements DoctorService {
 
 		return doctor; // Trả về đối tượng Doctor nếu đăng nhập thành công, ngược lại trả về null
 	}
+
+	@Override
+	public List<Doctor> getAllDoctorsWithPage(int pageNumber, int pageSize) {
+		List<Doctor> doctors = new ArrayList<>();
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+
+		try {
+			// Tính toán offset (vị trí bắt đầu của trang)
+			int offset = (pageNumber - 1) * pageSize;
+
+			// Lấy kết nối từ pool
+			conn = connectionPool.getConnection("getAllDoctorsWithPage");
+
+			// Câu lệnh SQL để lấy dữ liệu phân trang
+			String sql = "SELECT * FROM doctors LIMIT ? OFFSET ?";
+			stmt = conn.prepareStatement(sql);
+
+			// Thiết lập giá trị cho các tham số trong câu lệnh SQL
+			stmt.setInt(1, pageSize); // Kích thước trang
+			stmt.setInt(2, offset); // Vị trí bắt đầu
+
+			// Thực thi câu lệnh và lấy kết quả
+			rs = stmt.executeQuery();
+
+			// Duyệt qua kết quả và thêm vào danh sách bác sĩ
+			while (rs.next()) {
+				Doctor doctor = new Doctor();
+				doctor.setId(rs.getInt("id"));
+				doctor.setFullname(rs.getString("fullname"));
+				doctor.setUsername(rs.getString("username"));
+				doctor.setPassword(rs.getString("password"));
+				doctor.setPhonenumber(rs.getString("phonenumber"));
+				doctor.setAddress(rs.getString("address"));
+				doctor.setAvatarUrl(rs.getString("avatar_url"));
+				doctor.setPosition(rs.getString("position"));
+				doctor.setEmail(rs.getString("email"));
+				doctor.setBirthday(rs.getDate("birthday"));
+
+				// Chuyển đổi chuỗi sang enum Gender
+				String genderStr = rs.getString("gender");
+				doctor.setGender(Gender.valueOf(genderStr.toUpperCase()));
+
+				doctor.setExperience(rs.getDouble("exp"));
+				doctor.setDescription(rs.getString("des"));
+				doctor.setPrice(rs.getInt("price"));
+				doctor.setClinicId(rs.getInt("clinic_id"));
+				doctor.setSpecialtyId(rs.getInt("specialty_id"));
+				doctors.add(doctor);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			// Đảm bảo đóng các kết nối khi xong
+			try {
+				if (rs != null)
+					rs.close();
+				if (stmt != null)
+					stmt.close();
+				if (conn != null)
+					connectionPool.releaseConnection(conn, "getAllDoctorsWithPage");
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return doctors;
+	}
+
 }

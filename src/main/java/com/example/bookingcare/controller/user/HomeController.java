@@ -40,7 +40,7 @@ public class HomeController {
 		List<Doctor> doctorList = doctorService.getAllDoctors();
 		// Thêm danh sách bác sĩ vào model
 		model.addAttribute("doctors", doctorList);
-		return "user/listDoctor"; // Chuyển đến view danh sách bác sĩ
+		return "user/listDoctor";
 	}
 
 	// Phương thức hiển thị danh sách cơ sở y tế
@@ -50,7 +50,7 @@ public class HomeController {
 		List<Clinic> clinicList = clinicService.getAllClinics();
 		// Thêm danh sách cơ sở y tế vào model
 		model.addAttribute("clinics", clinicList);
-		return "user/listClinic"; // Chuyển đến view danh sách cơ sở y tế
+		return "user/listClinic";
 	}
 
 	// Phương thức hiển thị danh sách chuyên khoa
@@ -60,6 +60,6 @@ public class HomeController {
 		List<Specialty> specialtyList = specialtyService.getAllSpecialties();
 		// Thêm danh sách chuyên khoa vào model
 		model.addAttribute("specialties", specialtyList);
-		return "user/listSpecialty"; // Chuyển đến view danh sách chuyên khoa
+		return "user/listSpecialty";
 	}
 }

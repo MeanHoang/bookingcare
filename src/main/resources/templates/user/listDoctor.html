@@ -24,20 +24,24 @@
         .doctor-card:hover {
             transform: translateY(-5px);
         }
-		.doctor-img {
-		    width: 100%;
-		    height: 350px;
-		    object-fit: cover;
-		    object-position: top;
-		}
-
+        .doctor-img {
+            width: 100%;
+            height: 350px;
+            object-fit: cover;
+            object-position: top;
+        }
+        /* Tùy chỉnh cho Select box */
+        .select-box {
+            width: 200px;
+            margin-bottom: 20px;
+        }
     </style>
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
         <div class="container-fluid">
             <a class="navbar-brand" href="/">
-               <span>Booking</span>Care
+                <span>Booking</span>Care
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -59,20 +63,27 @@
     </nav>
 
     <div class="container mt-5">
-        <h5>Bác sỹ nỗi bật</h5>
+        <h5>Bác sỹ nổi bật</h5>
+        
+        <div class="mb-4">
+            <select id="location" class="form-select select-box">
+                <option value="hanoi">Toàn Quốc</option>
+                <option value="hochiminh">Hồ Chí Minh</option>
+                <option value="toanquoc">Hà Nội</option>
+            </select>
+        </div>
+
         <div class="row">
             <!-- Lặp qua danh sách bác sĩ -->
             <div class="col-md-3 mb-3" th:each="doctor : ${doctors}">
-               <a th:href="@{|/danh-sach/bac-sy/${doctor.id}|}" class="text-decoration-none">
-
-                <div class="card doctor-card">
-					<img th:src="@{|/images/${doctor.avatarUrl}|}" alt="Ảnh bác sĩ" class="card-img-top doctor-img">
-                    <div class="card-body">
-                        <h5 class="card-title" th:text="${doctor.fullname}"></h5>
-                        <p class="card-text text-muted" th:text="${doctor.position}"></p>
+                <a th:href="@{|/danh-sach/bac-sy/${doctor.id}|}" class="text-decoration-none">
+                    <div class="card doctor-card">
+                        <img th:src="@{|/images/${doctor.avatarUrl}|}" alt="Ảnh bác sĩ" class="card-img-top doctor-img">
+                        <div class="card-body">
+                            <h5 class="card-title" th:text="${doctor.fullname}"></h5>
+                            <p class="card-text text-muted" th:text="${doctor.position}"></p>
+                        </div>
                     </div>
-                </div>
-                
                 </a>
             </div>
         </div>
