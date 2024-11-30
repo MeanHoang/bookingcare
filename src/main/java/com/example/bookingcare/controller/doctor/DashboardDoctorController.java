@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import com.example.bookingcare.service.doctor.DoctorService;
 
 @Controller
-@SessionAttributes("doctor") // Lưu đối tượng bác sĩ vào session
+@SessionAttributes("doctor")
 public class DashboardDoctorController {
 
 	@Autowired
