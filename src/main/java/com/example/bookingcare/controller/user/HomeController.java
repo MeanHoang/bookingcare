@@ -46,20 +46,18 @@ public class HomeController {
 	// Phương thức hiển thị danh sách cơ sở y tế
 	@GetMapping("/danh-sach/co-so-y-te")
 	public String listClinic(Model model) {
-		// Lấy danh sách cơ sở y tế từ service
-		List<Clinic> clinicList = clinicService.getAllClinics();
-		// Thêm danh sách cơ sở y tế vào model
+		List<Clinic> clinicList = clinicService.getAllClinics(3, 5);
 		model.addAttribute("clinics", clinicList);
-		return "user/listClinic"; // Chuyển đến view danh sách cơ sở y tế
+		return "user/listClinic"; 
 	}
 
 	// Phương thức hiển thị danh sách chuyên khoa
-	@GetMapping("/danh-sach/chuyen-khoa")
-	public String listSpecialty(Model model) {
-		// Lấy danh sách chuyên khoa từ service
-		List<Specialty> specialtyList = specialtyService.getAllSpecialties();
-		// Thêm danh sách chuyên khoa vào model
-		model.addAttribute("specialties", specialtyList);
-		return "user/listSpecialty"; // Chuyển đến view danh sách chuyên khoa
-	}
+//	@GetMapping("/danh-sach/chuyen-khoa")
+//	public String listSpecialty(Model model) {
+//		// Lấy danh sách chuyên khoa từ service
+//		List<Specialty> specialtyList = specialtyService.getAllSpecialties();
+//		// Thêm danh sách chuyên khoa vào model
+//		model.addAttribute("specialties", specialtyList);
+//		return "user/listSpecialty";
+//	}
 }

@@ -8,7 +8,7 @@ import com.example.bookingcare.model.Clinic;
 public interface ClinicService {
 
 	// Lấy tất cả các phòng khám
-	List<Clinic> getAllClinics();
+	List<Clinic> getAllClinics(int page, int size);
 
 	// Thêm mới phòng khám
 	void addClinic(Clinic clinic) throws SQLException;
