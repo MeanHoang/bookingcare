@@ -1,41 +1,26 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome Icons -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-    <!-- Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>Quản trị </title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         body {
-            background-color: #f8f9fa;
+            font-family: Arial, sans-serif;
+            padding-top: 70px;
         }
 
-        /* Sidebar */
-        .sidebar {
-            min-height: 100vh;
-            background-color: #343a40;
-            color: white;
-            padding: 15px;
-        }
-
-        .sidebar a {
-            color: white;
-            text-decoration: none;
-        }
-
-        .sidebar a:hover {
-            background-color: #495057;
-        }
-
-        /* Navbar */
         .navbar {
-            background-color: #495057;
+            background-color: #343a40;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 10px 0;
         }
 
         .navbar-brand {
@@ -48,73 +33,72 @@
             color: #ff9800;
         }
 
-        .navbar-nav {
-            flex-grow: 1;
-            justify-content: center;
+        .sidebar {
+            background-color: #495057;
+            color: white;
+            height: 100vh;
+            position: fixed;
+            width: 200px;
+            padding-top: 20px;
         }
 
-        .navbar-nav .form-control {
-            max-width: 300px;
-            margin: 0 auto;
+        .sidebar .nav-link {
+            color: white;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
-        .chart-container {
-            width: 100%;
-            height: 400px;
-            margin-bottom: 30px;
+        .sidebar .nav-link:hover {
+            background-color: #00bcd4;
         }
 
-        .card-stat {
-            margin-bottom: 20px;
+        .sidebar .nav-link.active {
+            background-color: #6c757d;
+            font-weight: bold;
+        }
+
+        .content {
+            margin-left: 220px;
+            padding: 20px;
         }
     </style>
 </head>
 
 <body>
     <div class="container-fluid">
-        <div class="row">
-            <!-- Navbar -->
-            <nav class="navbar navbar-expand-lg navbar-light">
-                <div class="container-fluid">
-                    <a class="navbar-brand">Booking<span>Care</span></a>
-                    <div class="navbar-nav ml-auto d-flex align-items-center">
-                        <!-- Search bar -->
-                        <input class="form-control" type="search" placeholder="Search..." aria-label="Search">
-                        
-                        <a href="#" class="nav-link">
-                            <i class="fas fa-comment-dots fa-2.4x" style="color: #007bff;"></i>
-                            <span class="badge bg-primary fs-6">3</span>
-                        </a>
-        
-                        <a href="#" class="nav-link">
-                            <i class="fas fa-bell fa-2.4x" style="color: #ff5733;"></i>
-                            <span class="badge bg-danger fs-6">5</span>
-                        </a>
-        
-                        <a href="#" class="nav-link">
-                            <img src="/images/avatarAdmin1.jpg" alt="Avatar" class="rounded-circle" width="60" height="60">
-                        </a>
-                    </div>
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-dark">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">Booking<span>Care</span></a>
+                <div class="d-flex mx-auto">
+                    <form action="admin/quan-ly-chuyen-khoa" method="get" class="d-flex">
+                        <input class="form-control" type="search" name="name" placeholder="Tìm kiếm theo tên..." aria-label="Search">
+                        <button class="btn btn-primary ms-2" type="submit">Tìm kiếm</button>
+                    </form>
                 </div>
-            </nav>
-        </div>
-        
+            </div>
+        </nav>
 
         <div class="row">
-            <!-- Left Sidebar -->
-            <div class="d-none d-md-block col-12 col-md-3 col-lg-2 sidebar p-3">
-                <h4><i class="fas fa-user"></i> Admin</h4>
-                <ul class="nav flex-column">
-                 <li class="nav-item"><a href="/admin/home" class="nav-link">DashBoard</a></li>
-                    <li class="nav-item"><a href="/admin/quan-ly-csyt" class="nav-link">Cơ Sở Y Tế</a></li>
-                    <li class="nav-item"><a href="/admin/chuyen-khoa" class="nav-link">Chuyên Khoa</a></li>
-                    <li class="nav-item"><a href="/admin/bac-sy" class="nav-link">Bác Sĩ</a></li>
-                    <li class="nav-item"><a href="/admin/doanh-thu" class="nav-link">Doanh thu</a></li>
-                </ul>
+            <!-- Sidebar -->
+            <div class="col-md-3 sidebar">
+                <nav class="nav flex-column">
+                    <a class="nav-link active" href="/admin/home">
+                        <i class="fas fa-home me-2"></i>Trang chủ
+                    </a>
+                    <a class="nav-link" href="/admin/quan-ly-admin">
+                        <i class="fas fa-user-shield me-2"></i>Admin
+                    </a>
+                    <a class="nav-link" href="/admin/quan-ly-csyt">
+                        <i class="fas fa-hospital me-2"></i>Cơ sở y tế
+                    </a>
+                    <a class="nav-link" href="/admin/quan-ly-bac-sy">
+                        <i class="fas fa-user-md me-2"></i>Bác sĩ
+                    </a>
+                </nav>
             </div>
 
-            <!-- Main Content (Middle) -->
-            <div class="col-md-9 col-lg-10 p-3">
+            <!-- Main Content -->
+            <div class="col-md-9 content">
                 <!-- Overview Cards -->
                 <div class="row">
                     <div class="col-md-6 col-lg-3">
@@ -151,142 +135,82 @@
                     </div>
                 </div>
 
-                <!-- Charts Row -->
                 <div class="row">
-                    <!-- Bar Chart - Cơ Sở Y Tế -->
                     <div class="col-md-6">
-                        <div class="chart-container">
-                            <canvas id="barChart"></canvas>
-                            <!-- Chú thích biểu đồ cột -->
-                            <p class="mt-3 text-center">Biểu đồ thể hiện số lượng bác sĩ ở các cơ sở</p>
-                        </div>
-                    </div>
-
-                    <!-- Pie Chart - Doanh thu -->
-                    <div class="col-md-6">
-                        <div class="chart-container">
-                            <canvas id="incomePieChart"></canvas>
-                            <!-- Chú thích biểu đồ tròn -->
-                            <p class="mt-3 text-center">Biểu đồ thể hiện tỷ lệ bác sĩ đạt thành tích cao trong các chuyên khoa</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Area Chart - Doanh Thu Theo Tháng -->
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="chart-container">
-                            <canvas id="areaChart"></canvas>
-                            <!-- Chú thích biểu đồ miền -->
-                            <p class="mt-3 text-center ">Biểu đồ thể hiện doanh thu theo từng tháng trong năm
+                        <div class="card">
+                            <div class="card-header bg-primary text-white">Biểu đồ tròn</div>
+                            <div class="card-body">
+                                <canvas id="pieChart"></canvas>
                             </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header bg-success text-white">Biểu đồ cột</div>
+                            <div class="card-body">
+                                <canvas id="barChart"></canvas>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Recent Activities -->
-                <div class="card mt-4">
-                    <div class="card-header">
-                        Recent Activities
-                    </div>
-                    <div class="card-body">
-                        <ul class="list-group">
-                            <li class="list-group-item">Bác sĩ Dr. Nguyễn đã cập nhật lịch làm việc.</li>
-                            <li class="list-group-item">Cơ sở y tế ABC đã được phê duyệt.</li>
-                            <li class="list-group-item">Chuyên khoa Tiêu hóa đã tuyển bác sĩ mới.</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- Data Table -->
-                <div class="card mt-4">
-                    <div class="card-header">Danh Sách Bác Sĩ Nổi Bật</div>
-                    <div class="card-body">
-                        <table class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Tên</th>
-                                    <th>Chuyên Khoa</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>Dr. Nguyễn Văn A</td>
-                                    <td>Chuyên khoa Tim Mạch</td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>Dr. Trần Thị B</td>
-                                    <td>Chuyên khoa Nhi</td>
-                                </tr>
-                                <tr>
-                                    <td>3</td>
-                                    <td>Dr. Lê Minh C</td>
-                                    <td>Chuyên khoa Ngoại Khoa</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                <div class="row mt-4">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header bg-warning text-dark">Biểu đồ đường</div>
+                            <div class="card-body">
+                                <canvas id="lineChart"></canvas>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        // Bar Chart
-        var ctx = document.getElementById('barChart').getContext('2d');
-        var barChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: ['CSYT A', 'CSYT B', 'CSYT C', 'CSYT D'],
-                datasets: [{
-                    label: 'Số Bác Sĩ',
-                    data: [8, 12, 15, 7],
-                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                    borderColor: 'rgba(54, 162, 235, 1)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
-
-        // Pie Chart
-        var ctx2 = document.getElementById('incomePieChart').getContext('2d');
-        var incomePieChart = new Chart(ctx2, {
+        // Biểu đồ tròn
+        const pieCtx = document.getElementById('pieChart').getContext('2d');
+        new Chart(pieCtx, {
             type: 'pie',
             data: {
-                labels: ['Tim Mạch', 'Nhi', 'Ngoại Khoa', 'Tiêu Hóa'],
+                labels: ['A', 'B', 'C'],
                 datasets: [{
-                    label: 'Bác Sĩ Thành Tích Cao',
-                    data: [30, 25, 20, 25],
-                    backgroundColor: ['#FF5733', '#33FF57', '#3357FF', '#F0E000'],
-                    borderWidth: 1
+                    data: [30, 50, 20],
+                    backgroundColor: ['#f39c12', '#e74c3c', '#3498db']
                 }]
             }
         });
 
-        // Area Chart
-        var ctx3 = document.getElementById('areaChart').getContext('2d');
-        var areaChart = new Chart(ctx3, {
+        // Biểu đồ cột
+        const barCtx = document.getElementById('barChart').getContext('2d');
+        new Chart(barCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Tháng 1', 'Tháng 2', 'Tháng 3'],
+                datasets: [{
+                    label: 'Doanh thu',
+                    data: [1200, 1900, 3000],
+                    backgroundColor: '#2ecc71'
+                }]
+            }
+        });
+
+        // Biểu đồ đường
+        const lineCtx = document.getElementById('lineChart').getContext('2d');
+        new Chart(lineCtx, {
             type: 'line',
             data: {
-                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                labels: ['Tuần 1', 'Tuần 2', 'Tuần 3'],
                 datasets: [{
-                    label: 'Doanh Thu',
-                    data: [1000, 1200, 1500, 1300, 1600, 1800],
-                    fill: true,
-                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    borderWidth: 1
+                    label: 'Lượt truy cập',
+                    data: [100, 200, 150],
+                    borderColor: '#9b59b6',
+                    borderWidth: 2,
+                    fill: false
                 }]
             }
         });

@@ -178,4 +178,43 @@ public class SpecialtyServiceImpl implements SpecialtyService {
 		}
 		return specialty;
 	}
+
+	@Override
+	public List<Specialty> findSpecialtyByName(String name) {
+	    String query = "SELECT * FROM specialty WHERE name LIKE ?";
+	    List<Specialty> specialties = new ArrayList<>();
+	    System.out.println("Executing SQL: " + query); // In ra câu truy vấn SQL
+	    System.out.println("Search Name: " + name); // In tên tìm kiếm
+
+	    try (Connection connection = connectionPool.getConnection("SpecialtyService");
+	         PreparedStatement stmt = connection.prepareStatement(query)) {
+
+	        stmt.setString(1, "%" + name + "%"); // Gán giá trị tìm kiếm với ký tự đại diện
+
+	        ResultSet resultSet = stmt.executeQuery();
+
+	        while (resultSet.next()) {
+	            Specialty specialty = new Specialty();
+	            specialty.setId(resultSet.getInt("id"));
+	            specialty.setName(resultSet.getString("name"));
+	            specialty.setDescription(resultSet.getString("des"));
+	            specialty.setLogoSpecialty(resultSet.getString("logo_specialty")); // Lấy logo specialty
+	            specialties.add(specialty);
+	            System.out.println("Specialty found: " + specialty.getName()); // In tên từng chuyên khoa tìm được
+	        }
+
+	        if (specialties.isEmpty()) {
+	            System.out.println("No specialties found for name: " + name); // In thông báo nếu không tìm thấy
+	        }
+	    } catch (SQLException e) {
+	        System.out.println("Error while fetching specialties: " + e.getMessage()); // In lỗi ra System
+	        e.printStackTrace();
+	    }
+
+	    return specialties;
+	}
+
+
+
+
 }

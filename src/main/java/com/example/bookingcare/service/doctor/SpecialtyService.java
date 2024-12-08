@@ -21,4 +21,6 @@ public interface SpecialtyService {
 
 	// Lấy thông tin chuyên khoa theo ID
 	Specialty getSpecialtyById(int id);
+	
+	public List<Specialty> findSpecialtyByName(String name );
 }

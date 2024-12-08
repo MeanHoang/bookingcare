@@ -155,7 +155,7 @@ public class AdminServiceImpl implements AdminService {
 	                admin.setID(resultSet.getInt("Id"));
 	                admin.setUsername(resultSet.getString("username"));
 	                admin.setPassword(resultSet.getString("password"));
-	                admin.setAvatarUrl(resultSet.getString("avatar_url"));
+	                admin.setActive(resultSet.getBoolean("is_active"));
 	                admin.setName(resultSet.getString("name"));
 
 	                // Thêm admin vào danh sách
@@ -216,7 +216,6 @@ public class AdminServiceImpl implements AdminService {
 		                admin.setID(resultSet.getInt("Id"));
 		                admin.setUsername(resultSet.getString("username"));
 		                admin.setPassword(resultSet.getString("password"));
-		                admin.setAvatarUrl(resultSet.getString("avatar_url"));
 		                admin.setName(resultSet.getString("name"));
 
 		                // In thông tin admin ra console (nếu cần)

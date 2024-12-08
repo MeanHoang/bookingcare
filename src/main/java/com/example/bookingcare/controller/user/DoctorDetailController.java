@@ -22,6 +22,7 @@ public class DoctorDetailController {
 		Doctor doctor = doctorService.getDoctorById(id);
 		System.out.print(doctor);
 		model.addAttribute("doctor", doctor);
+		
 
 		return "user/doctorDetail";
 	}

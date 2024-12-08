@@ -1,7 +1,5 @@
 package com.example.bookingcare.controller.admin;
 
-import java.io.File;
-import java.io.IOException;
 import java.sql.SQLException;
 
 import org.springframework.beans.factory.annotation.Autowired;

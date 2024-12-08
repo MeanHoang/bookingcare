@@ -29,4 +29,6 @@ public interface DoctorService {
 	List<Doctor> findDoctorByClinicId(int clinicId);
 
 	Doctor login(String username, String password);
+
+	List<Doctor> getAllDoctors(int page, int size);
 }

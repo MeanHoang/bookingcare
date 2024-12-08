@@ -1,5 +1,7 @@
 package com.example.bookingcare.service.doctor;
 
+import java.io.File;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -9,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.bookingcare.connection.ConnectionPoolImpl;
 import com.example.bookingcare.model.Doctor;
@@ -61,10 +64,75 @@ public class DoctorServiceImpl implements DoctorService {
 		}
 		return doctorList;
 	}
+	@Override
+	public List<Doctor> getAllDoctors(int page, int size) {
+	    List<Doctor> doctorList = new ArrayList<>();
+	    // Sửa câu truy vấn SQL để thêm phân trang
+	    String sql = "SELECT * FROM doctor LIMIT ? OFFSET ?";
+
+	    // Tính toán offset (vị trí bắt đầu) cho phân trang
+	    int offset = (page - 1) * size;
+
+	    try (Connection connection = connectionPool.getConnection("DoctorService");
+	            PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+	        preparedStatement.setInt(1, size);    // Số lượng bản ghi mỗi trang
+	        preparedStatement.setInt(2, offset);  // Vị trí bắt đầu (offset)
+
+	        try (ResultSet resultSet = preparedStatement.executeQuery()) {
+	            while (resultSet.next()) {
+	                Doctor doctor = new Doctor();
+	                doctor.setId(resultSet.getInt("id"));
+	                doctor.setFullname(resultSet.getString("fullname"));
+	                doctor.setUsername(resultSet.getString("username"));
+	                doctor.setPassword(resultSet.getString("password"));
+	                doctor.setPhonenumber(resultSet.getString("phonenumber"));
+	                doctor.setAddress(resultSet.getString("address"));
+	                doctor.setAvatarUrl(resultSet.getString("avatar_url"));
+	                doctor.setPosition(resultSet.getString("position"));
+	                doctor.setEmail(resultSet.getString("email"));
+	                doctor.setBirthday(resultSet.getDate("birthday"));
+
+	                // Chuyển đổi chuỗi sang enum Gender
+	                String genderStr = resultSet.getString("gender");
+	                doctor.setGender(Gender.valueOf(genderStr.toUpperCase()));
+
+	                doctor.setExperience(resultSet.getDouble("exp"));
+	                doctor.setDescription(resultSet.getString("des"));
+	                doctor.setPrice(resultSet.getInt("price"));
+	                doctor.setClinicId(resultSet.getInt("clinic_id"));
+	                doctor.setSpecialtyId(resultSet.getInt("specialty_id"));
+	                doctorList.add(doctor);
+	            }
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return doctorList;
+	}
+	
+	public int getTotalPages(int size) {
+	    String sql = "SELECT COUNT(*) FROM doctor";
+	    int totalRecords = 0;
+	    try (Connection connection = connectionPool.getConnection("DoctorService");
+	            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+	            ResultSet resultSet = preparedStatement.executeQuery()) {
+
+	        if (resultSet.next()) {
+	            totalRecords = resultSet.getInt(1);
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    
+	    // Tính tổng số trang, làm tròn lên nếu có dư bản ghi
+	    return (int) Math.ceil((double) totalRecords / size);
+	}
+
 
 	@Override
 	public void addDoctor(Doctor doctor) throws SQLException {
-		String query = "INSERT INTO doctor (fullname, username, password, phonenumber, address, avatar_url, position, email, birthday, gender, experience, description, price, clinic_id, specialty_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+		String query = "INSERT INTO doctor ( fullname, username, password, phonenumber, address, avatar_url, position, email, birthday, gender, exp, des, price, clinic_id, specialty_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 		try (Connection connection = connectionPool.getConnection("DoctorService");
 				PreparedStatement stmt = connection.prepareStatement(query)) {
@@ -91,10 +159,23 @@ public class DoctorServiceImpl implements DoctorService {
 			stmt.executeUpdate();
 		}
 	}
+	public String saveLogo(MultipartFile file) {
+	    try {
+	        String uploadDir = "D:/bookingcare/src/main/resources/static/images";
+	        String fileName = file.getOriginalFilename();
+	        File dest = new File(uploadDir, fileName);
+	        file.transferTo(dest);
+	        return fileName; // Trả về tên tệp để lưu vào cơ sở dữ liệu
+	    } catch (IOException e) {
+	        e.printStackTrace();
+	        return null;
+	    }
+  }
+
 
 	@Override
 	public void updateDoctor(Doctor doctor) throws SQLException {
-		String query = "UPDATE doctor SET fullname=?, username=?, password=?, phonenumber=?, address=?, avatar_url=?, position=?, email=?, birthday=?, gender=?, experience=?, description=?, price=?, clinic_id=?, specialty_id=? WHERE id=?";
+		String query = "UPDATE doctor SET fullname=?, username=?, password=?, phonenumber=?, address=?, avatar_url=?, position=?, email=?, birthday=?, gender=?, exp=?, des=?, price=?, clinic_id=?, specialty_id=? WHERE id=?";
 
 		try (Connection connection = connectionPool.getConnection("DoctorService");
 				PreparedStatement stmt = connection.prepareStatement(query)) {
