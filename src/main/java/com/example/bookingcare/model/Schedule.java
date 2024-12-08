@@ -1,19 +1,22 @@
 package com.example.bookingcare.model;
 
+import java.sql.Date;
+
 public class Schedule {
 	private int id;
 	private int doctorId;
-	private String day;
+	private Date day;
 	private int timeslotId;
 	private boolean isActive;
 	private boolean isUsed;
+	private String name;
 
 	// Constructor không tham số
 	public Schedule() {
 	}
 
 	// Constructor có tham số
-	public Schedule(int id, int doctorId, String day, int timeslotId, boolean isActive, boolean isUsed) {
+	public Schedule(int id, int doctorId, Date day, int timeslotId, boolean isActive, boolean isUsed) {
 		this.id = id;
 		this.doctorId = doctorId;
 		this.day = day;
@@ -23,6 +26,7 @@ public class Schedule {
 	}
 
 	// Getter và Setter
+
 	public int getId() {
 		return id;
 	}
@@ -39,11 +43,11 @@ public class Schedule {
 		this.doctorId = doctorId;
 	}
 
-	public String getDay() {
+	public Date getDay() {
 		return day;
 	}
 
-	public void setDay(String day) {
+	public void setDay(Date day) {
 		this.day = day;
 	}
 
@@ -69,6 +73,14 @@ public class Schedule {
 
 	public void setUsed(boolean used) {
 		isUsed = used;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	// Phương thức toString

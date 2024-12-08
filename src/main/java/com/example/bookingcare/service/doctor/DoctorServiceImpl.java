@@ -387,4 +387,16 @@ public class DoctorServiceImpl implements DoctorService {
 		return doctors;
 	}
 
+	@Override
+	public List<Doctor> findDoctorInHaNoiAndCategoryId(int categoryId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Doctor> findDoctorInHCMAndCategoryId(int categoryId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

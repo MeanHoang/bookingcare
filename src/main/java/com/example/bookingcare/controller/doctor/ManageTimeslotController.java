@@ -78,6 +78,7 @@ public class ManageTimeslotController {
 		LocalDate selectedLocalDate = LocalDate.parse(selectedDate);
 		scheduleService.activeSchedule(timeslotId, doctorId, Date.valueOf(selectedLocalDate));
 		model.addAttribute("message", "Timeslot " + timeslotId + " đã được bật.");
+		model.addAttribute("selectedDate", "Timeslot " + timeslotId + " đã được bật.");
 
 		System.out.println("Timeslot " + timeslotId + " activated successfully.");
 		return "redirect:/doctor/quan-ly-lich-trinh";

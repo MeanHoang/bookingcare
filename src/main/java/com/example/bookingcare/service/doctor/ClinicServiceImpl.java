@@ -122,4 +122,5 @@ public class ClinicServiceImpl implements ClinicService {
 		}
 		return clinic;
 	}
+
 }

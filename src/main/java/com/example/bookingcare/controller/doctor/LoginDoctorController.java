@@ -60,6 +60,6 @@ public class LoginDoctorController {
 		// Debug: Kiểm tra sau khi logout
 		System.out.println("Đăng xuất thành công.");
 
-		return "redirect:/doctor/loginDoctor"; // Quay lại trang đăng nhập
+		return "redirect:/doctor/login"; // Quay lại trang đăng nhập
 	}
 }

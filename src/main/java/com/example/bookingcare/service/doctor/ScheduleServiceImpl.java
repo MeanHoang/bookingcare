@@ -39,7 +39,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 					Schedule schedule = new Schedule();
 					schedule.setId(rs.getInt("id"));
 					schedule.setDoctorId(rs.getInt("doctor_id"));
-					schedule.setDay(rs.getString("day"));
+					schedule.setDay(rs.getDate("day"));
 					schedule.setTimeslotId(rs.getInt("timeslot_id"));
 					schedule.setActive(rs.getBoolean("is_active"));
 
@@ -88,33 +88,47 @@ public class ScheduleServiceImpl implements ScheduleService {
 	}
 
 	@Override
-	public List<Timeslot> getActiveScheduleForDoctor(int doctorId, Date day) {
-		List<Timeslot> timeslots = new ArrayList<>();
-		String query = "SELECT t.id, t.name, t.start_time, t.end_time " + "FROM schedule s "
-				+ "JOIN timeslot t ON s.timeslot_id = t.id " + "WHERE s.doctor_id = ? " + "AND s.day = ? "
-				+ "AND s.is_active = 1";
+	public List<Schedule> getActiveScheduleForDoctor(int doctorId, Date day) {
+		List<Schedule> schedules = new ArrayList<>();
+		String query = "SELECT s.id, s.doctor_id, s.day, s.timeslot_id, s.is_active, s.is_used, t.name "
+				+ "FROM schedule s " + "JOIN timeslot t ON s.timeslot_id = t.id "
+				+ "WHERE s.is_active = TRUE AND s.doctor_id = ? AND s.day = ? AND s.is_used= FALSE";
+
 		try (Connection connection = connectionPool.getConnection("Schedule");
 				PreparedStatement stmt = connection.prepareStatement(query)) {
 
-			stmt.setInt(1, doctorId);
-			stmt.setDate(2, day);
+			// Gán giá trị cho tham số trong truy vấn
+			stmt.setInt(1, doctorId); // doctorId
+			stmt.setDate(2, day); // day (selectedDate)
+
+			System.out.println("Query prepared: " + stmt);
 
 			try (ResultSet rs = stmt.executeQuery()) {
-				while (rs.next()) {
-					Timeslot timeslot = new Timeslot();
-					timeslot.setId(rs.getInt("id"));
-					timeslot.setName(rs.getString("name"));
-					timeslot.setStartTime(rs.getString("start_time"));
-					timeslot.setEndTime(rs.getString("end_time"));
-					timeslots.add(timeslot);
+				System.out.println("Query executed successfully.");
+
+				while (rs.next()) { // Chỉnh lại để duyệt tất cả kết quả
+					Schedule schedule = new Schedule();
+					schedule.setId(rs.getInt("id"));
+					schedule.setDoctorId(rs.getInt("doctor_id"));
+					schedule.setDay(rs.getDate("day"));
+					schedule.setTimeslotId(rs.getInt("timeslot_id"));
+					schedule.setActive(rs.getBoolean("is_active"));
+					schedule.setUsed(rs.getBoolean("is_used"));
+					schedule.setName(rs.getString("name"));
+
+					schedules.add(schedule);
+
+					// Debug thông tin bản ghi
+					System.out.println("Check Schedule: " + schedule);
 				}
 			}
 
 		} catch (SQLException e) {
 			e.printStackTrace();
+			System.out.println("SQL Error: " + e.getMessage());
 		}
 
-		return timeslots;
+		return schedules;
 	}
 
 	@Override
@@ -198,6 +212,82 @@ public class ScheduleServiceImpl implements ScheduleService {
 		} catch (SQLException e) {
 			throw new SQLException("Error activating schedule for doctor ID: " + doctorId, e);
 		}
+	}
+
+	@Override
+	public void isUsedSchedule(int scheduleId) throws SQLException {
+		// SQL query to mark the schedule as used
+		String query = "UPDATE schedule SET is_used = TRUE WHERE id = ?";
+
+		try (Connection connection = connectionPool.getConnection("Schedule");
+				PreparedStatement stmt = connection.prepareStatement(query)) {
+
+			stmt.setInt(1, scheduleId); // Set the schedule ID parameter
+
+			int rowsUpdated = stmt.executeUpdate(); // Execute the update
+
+			if (rowsUpdated > 0) {
+				System.out.println("Schedule ID " + scheduleId + " has been marked as used.");
+			} else {
+				System.out.println("No schedule found with ID " + scheduleId + ".");
+			}
+		} catch (SQLException e) {
+			// Handle any SQL exception that occurs
+			throw new SQLException("Error marking schedule as used for schedule ID: " + scheduleId, e);
+		}
+	}
+
+	@Override
+	public void isNotUsedSchedule(int scheduleId) throws SQLException {
+		// SQL query to mark the schedule as used
+		String query = "UPDATE schedule SET is_used = FALSE WHERE id = ?";
+
+		try (Connection connection = connectionPool.getConnection("Schedule");
+				PreparedStatement stmt = connection.prepareStatement(query)) {
+
+			stmt.setInt(1, scheduleId); // Set the schedule ID parameter
+
+			int rowsUpdated = stmt.executeUpdate(); // Execute the update
+
+			if (rowsUpdated > 0) {
+				System.out.println("Schedule ID " + scheduleId + " has been marked as used.");
+			} else {
+				System.out.println("No schedule found with ID " + scheduleId + ".");
+			}
+		} catch (SQLException e) {
+			// Handle any SQL exception that occurs
+			throw new SQLException("Error marking schedule as used for schedule ID: " + scheduleId, e);
+		}
+	}
+
+	@Override
+	public Schedule getScheduleByID(int scheduleId) {
+		Schedule schedule = null;
+		String query = "SELECT id, doctor_id, day, timeslot_id, is_active, is_used " + "FROM schedule WHERE id = ?";
+
+		try (Connection connection = connectionPool.getConnection("Schedule");
+				PreparedStatement stmt = connection.prepareStatement(query)) {
+
+			stmt.setInt(1, scheduleId);
+
+			try (ResultSet rs = stmt.executeQuery()) {
+				if (rs.next()) {
+					schedule = new Schedule();
+					schedule.setId(rs.getInt("id"));
+					schedule.setDoctorId(rs.getInt("doctor_id"));
+					schedule.setDay(rs.getDate("day"));
+					schedule.setTimeslotId(rs.getInt("timeslot_id"));
+					schedule.setActive(rs.getBoolean("is_active"));
+					schedule.setUsed(rs.getBoolean("is_used"));
+				}
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("Error retrieving schedule by ID: " + e.getMessage());
+		}
+
+		return schedule;
 	}
 
 }

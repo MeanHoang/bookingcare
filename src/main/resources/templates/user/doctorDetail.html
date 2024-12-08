@@ -24,31 +24,33 @@
             margin-bottom: 15px;
         }
 
-        .schedule-time {
-            background-color: #f8f9fa;
-            padding: 10px;
-            border-radius: 5px;
-            text-align: center;
-            margin: 5px;
-            cursor: pointer;
-        }
+		.schedule-time {
+		    background-color: #f8f9fa;
+		    padding: 6px 10px;
+		    border-radius: 5px;
+		    text-align: center;
+		    margin: 5px;
+		    cursor: pointer;
+		    font-size: 14px;
+		    width: 100%;  /* Đảm bảo các ô chiếm hết chiều rộng của cột */
+		}
+		
+		.schedule-time:hover {
+		    background-color: #007bff;
+		    color: white;
+		}
 
-        .schedule-time:hover {
-            background-color: #007bff;
-            color: white;
-        }
 
-        /* Clinic Card Style */
+        /* Card Styles */
         .card {
             border: none;
             border-radius: 10px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
             margin-bottom: 30px;
-            overflow: hidden;
         }
 
         .card-body {
-            padding: 25px;
+            padding: 0; 
         }
 
         .card-title {
@@ -63,19 +65,9 @@
             line-height: 1.6;
         }
 
-        /* Doctor List Card */
-        .doctor-card {
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease-in-out;
-            margin-bottom: 20px;
-            display: flex;
-            flex-direction: column;
-            background-color: #f9f9f9;
-        }
-
-        .doctor-card:hover {
-            transform: translateY(-5px);
+        .highlight {
+            color: #007bff;
+            font-weight: bold;
         }
 
         .doctor-card img {
@@ -87,19 +79,6 @@
 
         .doctor-card .card-body {
             padding: 20px;
-        }
-
-        .doctor-card .card-title {
-            font-size: 20px;
-            color: #007bff;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-
-        .doctor-card .card-text {
-            font-size: 14px;
-            color: #555;
-            margin-bottom: 5px;
         }
 
         .doctor-card .card-footer {
@@ -114,7 +93,6 @@
             font-weight: bold;
         }
 
-        /* Specialty image */
         .specialty-img {
             width: 100%;
             height: auto;
@@ -153,46 +131,53 @@
         <div class="row mt-3">
             <!-- Left Column -->
             <div class="col-md-8">
-					<div class="d-flex align-items-center mb-4">
-                    <!-- Sử dụng Thymeleaf để hiển thị ảnh đại diện bác sĩ -->
-                    
-                    <img th:src="@{|/images/${doctor.avatarUrl}|}" alt="Bác Sĩ" class="doctor-avatar mr-3">
+                <div class="d-flex align-items-center mb-4">
+                    <img th:src="@{|/images/${doctor.avatarUrl}|}" alt="Bác Sĩ" class="doctor-avatar me-3">
                     <div>
-                        <!-- Thay thế thông tin bác sĩ bằng các thuộc tính từ model -->
                         <h2 th:text="${doctor.fullname}"></h2>
-			        <p><strong>Chuyên khoa:</strong> <span th:text="${doctor.position}"></span></p>
-			        <p><i class="fas fa-map-marker-alt"></i><span th:text="${doctor.address}"></span></p>
+                        <p><strong>Chuyên khoa:</strong> <span th:text="${doctor.position}"></span></p>
+                        <p><i class="fas fa-map-marker-alt"></i><span th:text="${doctor.address}"></span></p>
                     </div>
                 </div>
 
+                <form th:action="@{|/danh-sach/bac-sy/${doctor.id}|}" method="post" class="mb-4">
+                    <label for="date">Chọn ngày đặt lịch:</label>
+                    <select id="date" name="date" class="form-select mb-3" required>
+                        <option th:each="day : ${nextDays}" th:value="${day}" th:text="${day}"></option>
+                    </select>
+                    <button type="submit" class="btn btn-primary">Xác nhận</button>
+                </form>
 
-                <div>
-                    <h5 class="highlight">Lịch Khám</h5>
-                    <div class="d-flex flex-wrap">
-                        <div class="schedule-time">08:00 - 08:30</div>
-                        <div class="schedule-time">08:30 - 09:00</div>
-                        <div class="schedule-time">09:00 - 09:30</div>
-                        <div class="schedule-time">09:30 - 10:00</div>
-                        <div class="schedule-time">10:00 - 10:30</div>
-                        <div class="schedule-time">10:30 - 11:00</div>
-                        <div class="schedule-time">11:00 - 11:30</div>
-                        <div class="schedule-time">14:30 - 15:00</div>
-                    </div>
-                    <p class="mt-2">Chọn và đặt (Phí đặt lịch 0đ)</p>
-                </div>
+                <h5 class="highlight">Lịch Khám</h5>
+				<div class="row">
+				    <div class="col-2" th:each="schedule : ${schedules}">
+				        <form action="/dat-lich-kham" method="get">
+				            <input type="hidden" name="doctorId" th:value="${doctor.id}">
+				            <input type="hidden" name="scheduleId" th:value="${schedule.id}">
+				            <input type="hidden" name="timeslotName" th:value="${schedule.name}">        
+				            <input type="hidden" name="day" th:value="${selectedDate}">
+				            <button type="submit" class="schedule-time">
+				                <span th:text="${schedule.name}"></span>
+				            </button>
+				        </form>
+				    </div>
+				</div>
+
+				</div>
+
+
+                <p class="mt-2">Chọn và đặt (Phí đặt lịch 0đ)</p>
 
                 <div class="mt-4">
                     <h5>Khám và điều trị</h5>
                     <p th:text="${doctor.description}"></p>
                     <p>Bác sĩ nhận khám mọi lứa tuổi</p>
                     <p><strong>Năm kinh nghiệm:</strong> <span th:text="${doctor.experience}"></span></p>
-                    
-                    <h5>Liên hệ</h5>
-			        <p><strong>SĐT:</strong> <span th:text="${doctor.phonenumber}"></span></p>
-			        <p><strong>Email:</strong> <span th:text="${doctor.email}"></span></p>
-			    	<p><i class="fas fa-map-marker-alt"></i><span th:text="${doctor.address}"></span></p>
-			        
 
+                    <h5>Liên hệ</h5>
+                    <p><strong>SĐT:</strong> <span th:text="${doctor.phonenumber}"></span></p>
+                    <p><strong>Email:</strong> <span th:text="${doctor.email}"></span></p>
+                    <p><i class="fas fa-map-marker-alt"></i><span th:text="${doctor.address}"></span></p>
                 </div>
             </div>
 
