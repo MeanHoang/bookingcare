@@ -30,7 +30,7 @@ public class ConnectionPoolImpl implements ConnectionPool {
 		}
 		// Xác định tài khoản
 		this.username = "root";
-		this.userpass = "123456";
+		this.userpass = "Nguyenkim102@";
 
 		// Xác định đường dẫn thực thi
 		this.url = "jdbc:mysql://localhost:3306/bookingcare_db?allowMultiQueries=true";

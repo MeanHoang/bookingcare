@@ -38,4 +38,7 @@ public interface DoctorService {
 
 	List<Doctor> getAllDoctors(int page, int size);
 
+	List<Doctor> findDoctorsByName(String name);
+	
+
 }

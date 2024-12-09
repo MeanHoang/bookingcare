@@ -24,4 +24,7 @@ public interface ClinicService {
 	// Lấy thông tin phòng khám theo ID
 	Clinic getClinicById(int id);
 
+	List<Clinic> getClinicsByName(String name);
+	
+
 }

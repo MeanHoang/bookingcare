@@ -19,16 +19,16 @@ public class UpdateAdminController {
 	@Autowired
 	private AdminServiceImpl adminService;
 
-	@GetMapping("/admin-detail/{id}")
+	@GetMapping("admin/sua-admin/{id}")
 	public String adminDetail(@PathVariable("id") int id, Model model) {
 		Admins admin = adminService.getAdminByID(id);
 		model.addAttribute("admin", admin);
 		System.out.println(admin);
-		return "admin/adminDetail";
+		return "admin/updateAdmin";
 	}
 //"/submit_update"
 
-	@PostMapping("/submit_update")
+	@PostMapping("admin/sua-admin-thanh-cong")
 	public String submitRegistration(@RequestParam("ID") int ID, @RequestParam("username") String username,
 			@RequestParam("password") String password, @RequestParam("name") String name) throws SQLException {
 		Admins ad1 = new Admins();
@@ -38,7 +38,7 @@ public class UpdateAdminController {
 		ad1.setUsername(username);
 		adminService.updateAdmin(ad1);
 
-		return "home";
+		return "redirect:/admin/home";
 	}
 
 }

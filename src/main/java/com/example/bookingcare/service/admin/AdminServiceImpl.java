@@ -57,12 +57,13 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public void addAdmin(Admins admin) throws SQLException {
 		try (Connection connection = connectionPool.getConnection("AdminService")) {
-			String query = "INSERT INTO admins (username, password, name) VALUES (?, ?, ?)";
+			String query = "INSERT INTO admins (username, password, name,is_active) VALUES (?, ?, ?,?)";
 			try (PreparedStatement stmt = connection.prepareStatement(query)) {
 
 				stmt.setString(1, admin.getUsername());
 				stmt.setString(2, admin.getPassword());
 				stmt.setString(3, admin.getName());
+				stmt.setBoolean(4, admin.isActive());
 				stmt.executeUpdate();
 			}
 		}
@@ -89,29 +90,17 @@ public class AdminServiceImpl implements AdminService {
 		return (int) Math.ceil((double) totalRecords / size); // Làm tròn lên nếu có phần dư
 	}
 
-	public String saveLogo(MultipartFile file) {
-		try {
-			String uploadDir = "D:/bookingcare/src/main/resources/static/images";
-			String fileName = file.getOriginalFilename();
-			File dest = new File(uploadDir, fileName);
-			file.transferTo(dest);
-			return fileName; // Trả về tên tệp để lưu vào cơ sở dữ liệu
-		} catch (IOException e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
-
 	@Override
 	public void updateAdmin(Admins admin) throws SQLException {
 		// TODO Auto-generated method stub
 		try (Connection connection = connectionPool.getConnection("AdminService")) {
-			String query = "UPDATE admins SET username = ?, password = ?, name = ? WHERE id = ?";
+			String query = "UPDATE admins SET username = ?, password = ?, name = ?,is_active = ? WHERE id = ?";
 			try (PreparedStatement stmt = connection.prepareStatement(query)) {
 				stmt.setString(1, admin.getUsername());
 				stmt.setString(2, admin.getPassword());
 				stmt.setString(3, admin.getName());
-				stmt.setInt(4, admin.getID());
+				stmt.setBoolean(4, admin.isActive());
+				stmt.setInt(5, admin.getID());
 				stmt.executeUpdate();
 			}
 		}

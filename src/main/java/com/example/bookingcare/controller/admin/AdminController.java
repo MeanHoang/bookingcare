@@ -57,13 +57,13 @@ public class AdminController {
 		return "admin/dashBoard";
 	}
 
-	@GetMapping("/addAdmin")
+	@GetMapping("/admin/dang-ky-tai-khoan")
 	public String addAdmin() {
 
 		return "admin/addAdmin";
 	}
 
-	@PostMapping("/submit_registration")
+	@PostMapping("admin/dang-ky-thanh-cong")
 	public String submitRegistration(@RequestParam("name") String name, @RequestParam("username") String username,
 			@RequestParam("password") String password) throws SQLException {
 		Admins ad1 = new Admins();
@@ -72,7 +72,36 @@ public class AdminController {
 		ad1.setPassword(password);
 		adminService.addAdmin(ad1);
 
-		return "home";
+		return "redirect:/admin/login";
 	}
+	@GetMapping("/admin/thong-tin-ca-nhan")
+	public String info(HttpSession session, Model model) {
+        // Kiểm tra xem admin đã đăng nhập chưa
+        Admins admin = (Admins) session.getAttribute("admin");
+
+        if (admin == null) {
+            return "redirect:/admin/login";  // Nếu chưa đăng nhập, chuyển đến trang login
+        }
+
+        model.addAttribute("admin", admin);  // Thêm thông tin admin vào model
+        return "admin/adminProfile";  // Trả về trang thông tin cá nhân admin
+    }
+	
+
+	   @GetMapping("/admin/dang-xuat")
+	    public String logout(Model model) {
+	
+	        return "admin/logoutAdmin";
+	    }
+	
+	   @GetMapping("/admin/xac-nhan-dang-xuat")
+	    public String ConfirmLogout(HttpSession session) {
+	        // Hủy session
+	        session.invalidate();
+
+	        // Chuyển hướng về trang đăng nhập
+	        return "redirect:/admin/login";
+	    }
+	
 
 }

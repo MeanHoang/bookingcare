@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Tùy chỉnh logo */
+        .navbar-brand {
+            font-size: 30px;
+            font-weight: bold;
+            color: #00bcd4;
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        .navbar-brand span {
+            color: #ff9800;
+        }
+
+        .navbar-vertical {
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 250px;
+            background-color: #f8f9fa;
+            box-shadow: 4px 0px 15px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .navbar-nav .nav-link {
+            font-size: 18px;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #333;
+        }
+
+        .navbar-nav .nav-link:hover {
+            background-color: #00bcd4;
+            color: #fff;
+            border-radius: 5px;
+        }
+
+        .navbar-nav .nav-link.active {
+            background-color: #ff9800;
+            color: #fff;
+            font-weight: bold;
+            border-radius: 5px;
+        }
+
+        /* Nội dung chính */
+        .content {
+            margin-left: 270px;
+            padding: 20px;
+            background-color: #f4f5f7;
+            min-height: 100vh;
+        }
+
+        .summary-card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .summary-card .card-body {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .summary-card i {
+            font-size: 40px;
+            color: #00bcd4;
+        }
+
+        .summary-card .stat {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        /* Style cho biểu đồ */
+        .chart-container {
+            max-width: 100%;
+            margin-top: 20px;
+        }
+
+        .table-hover th, .table-hover td {
+            text-align: center;
+        }
+
+        /* Thẻ thống kê */
+        .table-card {
+            margin-top: 20px;
+        }
+
+        /* Cập nhật kích thước biểu đồ hình tròn */
+		.pie-chart-container {
+		    width: 300px; 
+		    height: 300px;
+		    margin: auto;
+		}
+    </style>
+</head>
+
+<body>
+
+    <!-- Thanh điều hướng dọc -->
+    <nav class="navbar navbar-light bg-light navbar-vertical">
+        <div class="container-fluid flex-column">
+            <a class="navbar-brand" href="#">
+                <span>Admin</span>Care
+            </a>
+            <ul class="navbar-nav flex-column mt-3">
+                <li class="nav-item">
+                    <a class="nav-link active" href="/admin/home">
+                        <i class="bi bi-house-door"></i> Trang chủ
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/quan-ly-csyt">
+                        <i class="bi bi-hospital"></i> Quản lý cơ sở y tế
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/quan-ly-chuyen-khoa">
+                        <i class="bi bi-journal-medical"></i> Quản lý chuyên khoa
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/quan-ly-bac-sy">
+                        <i class="bi bi-person-badge"></i> Quản lý bác sĩ
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/giao-dich">
+                        <i class="bi bi-credit-card"></i> Quản lý giao dịch
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/doanh-thu">
+                        <i class="bi bi-bar-chart"></i> Doanh thu
+                    </a>
+                </li>
+                <li class="nav-item mt-auto">
+                    <a class="nav-link text-danger" href="/admin/dang-xuat">
+                        <i class="bi bi-box-arrow-right"></i> Đăng xuất
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Nội dung chính -->
+    <div class="content container mt-5">
+        <h1>Chào mừng đến với Admin Dashboard</h1>
+        <p class="text-muted">Quản lý và giám sát toàn bộ hệ thống một cách hiệu quả.</p>
+
+        <!-- Các thẻ thống kê (4 thẻ) -->
+        <div class="row mt-4">
+            <div class="col-md-3">
+                <div class="card summary-card">
+                    <div class="card-body">
+                        <i class="bi bi-people"></i>
+                        <div>
+                            <div class="stat">134</div>
+                            <div>Người dùng</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card summary-card">
+                    <div class="card-body">
+                        <i class="bi bi-person-badge"></i>
+                        <div>
+                            <div class="stat">567</div>
+                            <div>Bác sĩ</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card summary-card">
+                    <div class="card-body">
+                        <i class="bi bi-currency-dollar"></i>
+                        <div>
+                            <div class="stat">$12,345</div>
+                            <div>Doanh thu</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card summary-card">
+                    <div class="card-body">
+                        <i class="bi bi-bar-chart"></i>
+                        <div>
+                            <div class="stat">25</div>
+                            <div>Lịch khám</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Biểu đồ thống kê doanh thu -->
+        <div class="chart-container row mt-4">
+            <div class="col-md-6">
+                <canvas id="revenueChart"></canvas>
+            </div>
+   		<div class="col-md-6 pie-chart-container">
+        <canvas id="revenueTypeChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Bảng người dùng -->
+        <div class="row table-card mt-4">
+            <div class="col-12">
+                <h4>Danh sách người dùng</h4>
+                <table class="table table-hover table-bordered">
+                    <thead class="table-light">
+                        <tr>
+                            <th>#</th>
+                            <th>Tên</th>
+                            <th>Email</th>
+                            <th>Trạng thái</th>
+                            <th>Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>Trịnh Minh Hoàng</td>
+                            <td>viethoangxtpro08@gmail.com</td>
+                            <td><span class="badge bg-success">Hoạt động</span></td>
+                            <td>
+                                <button class="btn btn-sm btn-primary">Chi tiết</button>
+                                <button class="btn btn-sm btn-danger">Xóa</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>Trần Thị Liễu</td>
+                            <td>tranthib@example.com</td>
+                            <td><span class="badge bg-danger">Không hoạt động</span></td>
+                            <td>
+                                <button class="btn btn-sm btn-primary">Chi tiết</button>
+                                <button class="btn btn-sm btn-danger">Xóa</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+<div id="chartData" class="hidden"
+         th:data-thang10="${soLuongThang10}" 
+         th:data-thang11="${soLuongThang11}" 
+         th:data-thang12="${soLuongThang12}">
+    </div>
+    </div>
+
+    <!-- Bootstrap và Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+    const chartData = document.getElementById('chartData');
+    const soLuongThang10 = parseInt(chartData.dataset.thang10, 10)*100;
+    const soLuongThang11 = parseInt(chartData.dataset.thang11, 10)*100;
+    const soLuongThang12 = parseInt(chartData.dataset.thang12, 10)*100;
+
+        // Biểu đồ thống kê doanh thu theo tháng
+        const ctxRevenue = document.getElementById('revenueChart').getContext('2d');
+        const revenueChart = new Chart(ctxRevenue, {
+            type: 'bar',
+            data: {
+                labels: ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4'],
+                datasets: [{
+                    label: 'Doanh thu ($)',
+                    data: [soLuongThang10, soLuongThang12, soLuongThang11, soLuongThang12],
+                    backgroundColor: '#00bcd4',
+                    borderColor: '#00bcd4',
+                    borderWidth: 1
+                }]
+            }
+        });
+
+        // Biểu đồ phân loại doanh thu
+        const ctxRevenueType = document.getElementById('revenueTypeChart').getContext('2d');
+        const revenueTypeChart = new Chart(ctxRevenueType, {
+            type: 'pie',
+            data: {
+                labels: ['Hà Nội', 'Hồ Chí Minh', 'Khác'],
+                datasets: [{
+                    data: [45, 50, 5],
+                    backgroundColor: ['#00bcd4', '#ff9800', '#4caf50'],
+                    hoverOffset: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+            }
+        });
+    </script>
+</body>
+
+</html>
