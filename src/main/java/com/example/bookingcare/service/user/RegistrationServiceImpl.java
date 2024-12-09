@@ -361,4 +361,32 @@ public class RegistrationServiceImpl implements RegistrationService {
 		return null; // Nếu không tìm thấy hoặc có lỗi, trả về null
 	}
 
+	@Override
+	public int CountRegistrationByMonth(int month) {
+		String sql = "SELECT COUNT(*) AS count FROM registration WHERE MONTH(day) = ?";
+		System.out.println("Executing SQL: " + sql); // In câu lệnh SQL để debug
+
+		try (Connection connection = connectionPool.getConnection("RegistrationService");
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+			// Gán tham số tháng vào câu lệnh SQL
+			preparedStatement.setInt(1, month);
+
+			// Thực thi câu lệnh và lấy kết quả
+			ResultSet resultSet = preparedStatement.executeQuery();
+
+			if (resultSet.next()) {
+				int count = resultSet.getInt("count");
+				System.out.println("Count of registrations in month " + month + ": " + count);
+				return count;
+			}
+		} catch (SQLException e) {
+			System.out.println("Error while counting registrations for month: " + e.getMessage());
+			e.printStackTrace();
+		}
+
+		// Trả về 0 nếu có lỗi hoặc không tìm thấy kết quả
+		return 0;
+	}
+
 }

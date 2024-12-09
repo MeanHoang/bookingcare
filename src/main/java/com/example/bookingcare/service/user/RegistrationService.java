@@ -26,4 +26,5 @@ public interface RegistrationService {
 
 	Registration getRegistrationById(int registrationId);
 
+	int CountRegistrationByMonth(int month);
 }

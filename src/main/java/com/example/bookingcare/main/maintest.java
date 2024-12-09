@@ -50,7 +50,7 @@ public class maintest {
 
 		List<Admins> admins = new ArrayList<>();
 		try {
-			admins = adminService.getAllAdmins();
+//			admins = adminService.getAllAdmins();
 			System.out.print(admins);
 		} catch (Exception e) {
 			e.printStackTrace();

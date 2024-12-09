@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sửa Bác Sĩ</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+<style>
+        /* Tùy chỉnh logo */
+        .navbar-brand {
+            font-size: 30px;
+            font-weight: bold;
+            color: #00bcd4;
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        .navbar-brand span {
+            color: #ff9800;
+        }
+
+        .navbar-vertical {
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 250px;
+            background-color: #f8f9fa;
+            box-shadow: 4px 0px 15px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .navbar-nav .nav-link {
+            font-size: 18px;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #333;
+        }
+
+        .navbar-nav .nav-link:hover {
+            background-color: #00bcd4;
+            color: #fff;
+            border-radius: 5px;
+        }
+
+        .navbar-nav .nav-link.active {
+            background-color: #ff9800;
+            color: #fff;
+            font-weight: bold;
+            border-radius: 5px;
+        }
+
+        /* Nội dung chính */
+        .content {
+            margin-left: 270px;
+            padding: 20px;
+            background-color: #f4f5f7;
+            min-height: 100vh;
+        }
+        </style>
+        
+</head>
+<body>
+       <nav class="navbar navbar-light bg-light navbar-vertical">
+        <div class="container-fluid flex-column">
+            <a class="navbar-brand" href="#">
+                <span>Admin</span>Care
+            </a>
+            <ul class="navbar-nav flex-column mt-3">
+                <li class="nav-item">
+                    <a class="nav-link active" href="/admin/home">
+                        <i class="bi bi-house-door"></i> Trang chủ
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/quan-ly-csyt">
+                        <i class="bi bi-hospital"></i> Quản lý cơ sở y tế
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/quan-ly-chuyen-khoa">
+                        <i class="bi bi-journal-medical"></i> Quản lý chuyên khoa
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/quan-ly-bac-sy">
+                        <i class="bi bi-person-badge"></i> Quản lý bác sĩ
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/giao-dich">
+                        <i class="bi bi-credit-card"></i> Quản lý giao dịch
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/doanh-thu">
+                        <i class="bi bi-bar-chart"></i> Doanh thu
+                    </a>
+                </li>
+                <li class="nav-item mt-auto">
+                    <a class="nav-link text-danger" href="/admin/dang-xuat">
+                        <i class="bi bi-box-arrow-right"></i> Đăng xuất
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Nội dung chính -->
+    <div class="content container mt-5">
+            <div class="col-12 col-md-9 content">
+                <h2>Sửa Bác Sĩ</h2>
+                <form class="mt-4" method="post" action="/admin/sua-bac-si/submit_update" enctype="multipart/form-data">
+                    <!-- ID bác sĩ để sửa -->
+                    <input type="hidden" name="id" th:value="${doctor.id}" />
+
+                    <div class="mb-3">
+                        <label for="fullname" class="form-label">Tên Bác Sĩ</label>
+                        <input type="text" class="form-control" id="fullname" name="fullname" th:value="${doctor.fullname}" placeholder="Nhập tên bác sĩ" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Tên Đăng Nhập</label>
+                        <input type="text" class="form-control" id="username" name="username" th:value="${doctor.username}" placeholder="Nhập tên đăng nhập" required>
+                    </div>
+               <div class="mb-3">
+    <label for="password" class="form-label">Mật Khẩu</label>
+    <input type="password" class="form-control" id="password" name="password" 
+           th:value="${doctor.password}" placeholder="Nhập mật khẩu" required>
+</div>
+
+                    <div class="mb-3">
+                        <label for="phonenumber" class="form-label">Số Điện Thoại</label>
+                        <input type="text" class="form-control" id="phonenumber" name="phonenumber" th:value="${doctor.phonenumber}" placeholder="Nhập số điện thoại" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="address" class="form-label">Địa Chỉ</label>
+                        <input type="text" class="form-control" id="address" name="address" th:value="${doctor.address}" placeholder="Nhập địa chỉ" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="avatarUrl" class="form-label">Ảnh Đại Diện</label>
+                        <input type="file" class="form-control" id="avatarUrl" name="avatarUrl" accept="image/*">
+                    </div>
+                    <div class="mb-3">
+                        <label for="position" class="form-label">Chức Vụ</label>
+                        <input type="text" class="form-control" id="position" name="position" th:value="${doctor.position}" placeholder="Nhập chức vụ" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" name="email" th:value="${doctor.email}" placeholder="Nhập email" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="birthday" class="form-label">Ngày Sinh</label>
+                        <input type="date" class="form-control" id="birthday" name="birthday" th:value="${doctor.birthday}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="gender" class="form-label">Giới Tính</label>
+                        <select class="form-select" id="gender" name="gender" required>
+                            <option th:value="MALE" th:text="'Nam'" th:selected="${doctor.gender == 'MALE'}">Nam</option>
+                            <option th:value="FEMALE" th:text="'Nữ'" th:selected="${doctor.gender == 'FEMALE'}">Nữ</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="experience" class="form-label">Kinh Nghiệm</label>
+                        <input type="number" step="0.1" class="form-control" id="experience" name="experience" th:value="${doctor.experience}" placeholder="Nhập số năm kinh nghiệm" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Giới Thiệu</label>
+                        <textarea class="form-control" id="description" name="description" rows="3" placeholder="Nhập giới thiệu về bác sĩ" required th:text="${doctor.description}"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="price" class="form-label">Giá</label>
+                        <input type="number" class="form-control" id="price" name="price" th:value="${doctor.price}" placeholder="Nhập giá dịch vụ" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="clinicId" class="form-label">Cơ Sở Y Tế</label>
+                        <select class="form-select" id="clinicId" name="clinicId" required>
+                            <option th:each="clinic : ${clinics}" 
+                                    th:value="${clinic.id}" 
+                                    th:text="${clinic.name}" 
+                                    th:selected="${doctor.clinicId == clinic.id}">Cơ sở y tế</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="specialtyId" class="form-label">Chuyên Khoa</label>
+                        <select class="form-select" id="specialtyId" name="specialtyId" required>
+                            <option th:each="specialty : ${specialties}" 
+                                    th:value="${specialty.id}" 
+                                    th:text="${specialty.name}" 
+                                    th:selected="${doctor.specialtyId == specialty.id}">Chuyên khoa</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Cập Nhật</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+</body>
+</html>

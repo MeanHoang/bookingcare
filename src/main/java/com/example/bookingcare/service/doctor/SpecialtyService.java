@@ -10,6 +10,8 @@ public interface SpecialtyService {
 	// Lấy tất cả các chuyên khoa
 	List<Specialty> getAllSpecialties();
 
+	List<Specialty> getAllSpecialties(int page, int pageSize);
+
 	// Thêm chuyên khoa mới
 	void addSpecialty(Specialty specialty) throws SQLException;
 
@@ -21,4 +23,7 @@ public interface SpecialtyService {
 
 	// Lấy thông tin chuyên khoa theo ID
 	Specialty getSpecialtyById(int id);
+
+	public List<Specialty> findSpecialtyByName(String name);
+
 }

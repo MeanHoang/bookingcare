@@ -123,4 +123,64 @@ public class ClinicServiceImpl implements ClinicService {
 		return clinic;
 	}
 
+	@Override
+	public List<Clinic> getAllClinics(int page, int size) {
+		List<Clinic> clinicList = new ArrayList<>();
+		String sql = "SELECT * FROM clinic LIMIT ? OFFSET ?";
+
+		try (Connection connection = connectionPool.getConnection("ClinicService");
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+			// Tính toán giá trị OFFSET dựa trên page và size
+			int offset = (page - 1) * size;
+
+			preparedStatement.setInt(1, size); // LIMIT
+			preparedStatement.setInt(2, offset); // OFFSET
+
+			try (ResultSet resultSet = preparedStatement.executeQuery()) {
+				while (resultSet.next()) {
+					Clinic clinic = new Clinic();
+					clinic.setId(resultSet.getInt("id"));
+					clinic.setName(resultSet.getString("name"));
+					clinic.setDescription(resultSet.getString("des"));
+					clinic.setAddress(resultSet.getString("address"));
+					clinic.setWorkingTime(resultSet.getString("working_time"));
+					clinicList.add(clinic);
+
+					// Debug từng bản ghi (có thể bỏ nếu không cần)
+					System.out.println("ID: " + clinic.getId());
+					System.out.println("Name: " + clinic.getName());
+					System.out.println("Description: " + clinic.getDescription());
+					System.out.println("Address: " + clinic.getAddress());
+					System.out.println("Working Time: " + clinic.getWorkingTime());
+				}
+			}
+		} catch (SQLException e) {
+			System.err.println("Lỗi SQL: " + e.getMessage());
+			e.printStackTrace();
+		}
+
+		return clinicList;
+	}
+
+	public int getTotalPages(int size) {
+		int totalRecords = 0;
+		String countSql = "SELECT COUNT(*) FROM clinic"; // Truy vấn để đếm tổng số bản ghi trong bảng clinic
+
+		try (Connection connection = connectionPool.getConnection("ClinicService");
+				PreparedStatement countStmt = connection.prepareStatement(countSql);
+				ResultSet countResult = countStmt.executeQuery()) {
+
+			if (countResult.next()) {
+				totalRecords = countResult.getInt(1); // Lấy tổng số bản ghi từ kết quả truy vấn
+			}
+		} catch (SQLException e) {
+			e.printStackTrace(); // Xử lý lỗi
+		}
+
+		// Tính tổng số trang bằng cách chia tổng số bản ghi cho kích thước mỗi trang
+		// (size)
+		return (int) Math.ceil((double) totalRecords / size); // Làm tròn lên nếu có phần dư
+	}
+
 }

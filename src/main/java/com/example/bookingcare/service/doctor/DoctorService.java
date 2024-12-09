@@ -36,4 +36,6 @@ public interface DoctorService {
 
 	List<Doctor> findDoctorInHCMAndCategoryId(int categoryId);
 
+	List<Doctor> getAllDoctors(int page, int size);
+
 }
