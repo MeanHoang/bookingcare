@@ -57,9 +57,8 @@ public class LoginDoctorController {
 		// Xóa thông tin trong session khi bác sĩ đăng xuất
 		status.setComplete();
 
-		// Debug: Kiểm tra sau khi logout
 		System.out.println("Đăng xuất thành công.");
 
-		return "redirect:/doctor/login"; // Quay lại trang đăng nhập
+		return "redirect:/doctor/login";
 	}
 }

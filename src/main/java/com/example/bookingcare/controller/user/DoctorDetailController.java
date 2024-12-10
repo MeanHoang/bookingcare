@@ -14,8 +14,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.example.bookingcare.model.Clinic;
 import com.example.bookingcare.model.Doctor;
 import com.example.bookingcare.model.Schedule;
+import com.example.bookingcare.service.doctor.ClinicService;
 import com.example.bookingcare.service.doctor.DoctorService;
 import com.example.bookingcare.service.doctor.ScheduleService;
 
@@ -27,12 +29,19 @@ public class DoctorDetailController {
 	@Autowired
 	private ScheduleService scheduleSevice;
 
+	@Autowired
+	private ClinicService clinicService;
+
 	@GetMapping("/danh-sach/bac-sy/{id}")
 	public String getSpecialtyDetail(@PathVariable("id") int id, Model model) throws SQLException {
 
 		Doctor doctor = doctorService.getDoctorById(id);
 		System.out.print(doctor);
 		model.addAttribute("doctor", doctor);
+
+		Clinic clinic = clinicService.getClinicById(doctor.getClinicId());
+		System.out.print(clinic);
+		model.addAttribute("clinic", clinic);
 
 		LocalDate today = LocalDate.now();
 		List<String> nextDays = new ArrayList<>();
@@ -41,7 +50,6 @@ public class DoctorDetailController {
 		}
 
 		model.addAttribute("nextDays", nextDays);
-
 		return "user/doctorDetail";
 	}
 
@@ -52,6 +60,10 @@ public class DoctorDetailController {
 		Doctor doctor = doctorService.getDoctorById(id);
 		System.out.print(doctor);
 		model.addAttribute("doctor", doctor);
+
+		Clinic clinic = clinicService.getClinicById(doctor.getClinicId());
+		System.out.print(clinic);
+		model.addAttribute("clinic", clinic);
 
 		LocalDate today = LocalDate.now();
 		List<String> nextDays = new ArrayList<>();

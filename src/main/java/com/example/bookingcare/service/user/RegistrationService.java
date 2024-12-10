@@ -27,4 +27,9 @@ public interface RegistrationService {
 	Registration getRegistrationById(int registrationId);
 
 	int CountRegistrationByMonth(int month);
+
+	List<Registration> getRegistrationByDoctorIdAndIsNotActive(int doctorId, int page, int size);
+
+	int countRegistrationByDoctorIdAndIsNotActive(int doctorId);
+
 }

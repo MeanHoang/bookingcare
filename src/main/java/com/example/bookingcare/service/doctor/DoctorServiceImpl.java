@@ -162,7 +162,7 @@ public class DoctorServiceImpl implements DoctorService {
 
 	public String saveLogo(MultipartFile file) {
 		try {
-			String uploadDir = "D:/bookingcare/src/main/resources/static/images";
+			String uploadDir = "C:/Users/admin/eclipse-workspace/bookingcare/src/main/resources/static/images";
 			String fileName = file.getOriginalFilename();
 			File dest = new File(uploadDir, fileName);
 			file.transferTo(dest);

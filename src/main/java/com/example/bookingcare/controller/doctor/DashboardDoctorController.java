@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.example.bookingcare.service.doctor.DoctorService;
+import com.example.bookingcare.service.user.RegistrationService;
 
 @Controller
 @SessionAttributes("doctor")
@@ -14,6 +15,9 @@ public class DashboardDoctorController {
 
 	@Autowired
 	private DoctorService doctorService;
+
+	@Autowired
+	private RegistrationService registrationService;
 
 	// Trang chủ của bác sĩ
 	@GetMapping("/doctor/trang-chu")
@@ -31,6 +35,14 @@ public class DashboardDoctorController {
 		// Truyền thêm đối tượng bác sĩ vào view (nếu cần thiết)
 		model.addAttribute("doctor", model.getAttribute("doctor"));
 
+		int soLuongThang10 = registrationService.CountRegistrationByMonth(10);
+		int soLuongThang11 = registrationService.CountRegistrationByMonth(11);
+		int soLuongThang12 = registrationService.CountRegistrationByMonth(12);
+		System.out.println("soLuongThang12: " + soLuongThang12);
+
+		model.addAttribute("soLuongThang10", soLuongThang10); // Thêm danh sách bác sĩ
+		model.addAttribute("soLuongThang11", soLuongThang11); // Thêm danh sách bác sĩ
+		model.addAttribute("soLuongThang12", soLuongThang12); // Thêm danh sách bác sĩ
 		// Hiển thị trang chủ của bác sĩ
 		return "doctor/dashboard";
 	}
