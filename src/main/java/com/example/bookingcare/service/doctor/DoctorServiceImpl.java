@@ -29,7 +29,7 @@ public class DoctorServiceImpl implements DoctorService {
 	@Override
 	public List<Doctor> getAllDoctors() {
 		List<Doctor> doctorList = new ArrayList<>();
-		String sql = "SELECT * FROM doctor LIMIT 8";
+		String sql = "SELECT * FROM doctor";
 
 		try (Connection connection = connectionPool.getConnection("DoctorService");
 				PreparedStatement preparedStatement = connection.prepareStatement(sql);
@@ -162,7 +162,7 @@ public class DoctorServiceImpl implements DoctorService {
 
 	public String saveLogo(MultipartFile file) {
 		try {
-			String uploadDir = "C:/Users/admin/eclipse-workspace/bookingcare/src/main/resources/static/images";
+			String uploadDir = "D:/bookingcare/src/main/resources/static/images";
 			String fileName = file.getOriginalFilename();
 			File dest = new File(uploadDir, fileName);
 			file.transferTo(dest);
@@ -416,5 +416,48 @@ public class DoctorServiceImpl implements DoctorService {
 	public List<Doctor> findDoctorInHCMAndCategoryId(int categoryId) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public List<Doctor> findDoctorsByName(String name) {
+		List<Doctor> doctorList = new ArrayList<>();
+		String sql = "SELECT * FROM doctor WHERE fullname LIKE ?";
+
+		try (Connection connection = connectionPool.getConnection("DoctorService");
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+			// Gán giá trị tham số
+			preparedStatement.setString(1, "%" + name + "%");
+
+			try (ResultSet resultSet = preparedStatement.executeQuery()) {
+				while (resultSet.next()) {
+					Doctor doctor = new Doctor();
+					doctor.setId(resultSet.getInt("id"));
+					doctor.setFullname(resultSet.getString("fullname"));
+					doctor.setUsername(resultSet.getString("username"));
+					doctor.setPassword(resultSet.getString("password"));
+					doctor.setPhonenumber(resultSet.getString("phonenumber"));
+					doctor.setAddress(resultSet.getString("address"));
+					doctor.setAvatarUrl(resultSet.getString("avatar_url"));
+					doctor.setPosition(resultSet.getString("position"));
+					doctor.setEmail(resultSet.getString("email"));
+					doctor.setBirthday(resultSet.getDate("birthday"));
+
+					// Chuyển đổi chuỗi sang enum Gender
+					String genderStr = resultSet.getString("gender");
+					doctor.setGender(Gender.valueOf(genderStr.toUpperCase()));
+
+					doctor.setExperience(resultSet.getDouble("exp"));
+					doctor.setDescription(resultSet.getString("des"));
+					doctor.setPrice(resultSet.getInt("price"));
+					doctor.setClinicId(resultSet.getInt("clinic_id"));
+					doctor.setSpecialtyId(resultSet.getInt("specialty_id"));
+					doctorList.add(doctor);
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return doctorList;
 	}
 }

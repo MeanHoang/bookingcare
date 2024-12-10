@@ -125,11 +125,11 @@ public class SpecialtyServiceImpl implements SpecialtyService {
 
 	public String saveLogo(MultipartFile file) {
 		try {
-			String uploadDir = "C:/Users/admin/eclipse-workspace/bookingcare/src/main/resources/static/images";
+			String uploadDir = "D:/bookingcare/src/main/resources/static/images";
 			String fileName = file.getOriginalFilename();
 			File dest = new File(uploadDir, fileName);
 			file.transferTo(dest);
-			return fileName;
+			return fileName; // Trả về tên tệp để lưu vào cơ sở dữ liệu
 		} catch (IOException e) {
 			e.printStackTrace();
 			return null;

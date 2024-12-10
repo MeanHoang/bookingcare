@@ -66,6 +66,8 @@
 
     <div class="container mt-5">
         <h5>Danh Sách Chuyên Khoa</h5>
+        
+        
         <div class="row row-cols-lg-4 row-cols-md-3 row-cols-sm-2 g-3 mt-3">
             <li th:each="specialty : ${specialties}" class="col-md-4 mb-4">
                         <a th:href="@{|/danh-sach/chuyen-khoa/${specialty.id}|}" class="text-decoration-none">

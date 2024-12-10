@@ -26,7 +26,7 @@ public class HistoryController {
 
 	@GetMapping("/doctor/lich-su-kham-benh")
 	public String historyRegistration(@RequestParam(defaultValue = "1") int page,
-			@RequestParam(defaultValue = "10") int size, Model model) {
+			@RequestParam(defaultValue = "5") int size, Model model) {
 
 		Object doctor = model.getAttribute("doctor");
 		if (doctor == null) {

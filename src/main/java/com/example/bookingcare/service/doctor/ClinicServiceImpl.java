@@ -183,4 +183,34 @@ public class ClinicServiceImpl implements ClinicService {
 		return (int) Math.ceil((double) totalRecords / size); // Làm tròn lên nếu có phần dư
 	}
 
+	@Override
+	public List<Clinic> getClinicsByName(String name) {
+		List<Clinic> clinicList = new ArrayList<>();
+		String sql = "SELECT * FROM clinic WHERE name LIKE ?";
+
+		try (Connection connection = connectionPool.getConnection("ClinicService");
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+			// Gán giá trị tham số
+			preparedStatement.setString(1, "%" + name + "%");
+
+			try (ResultSet resultSet = preparedStatement.executeQuery()) {
+				while (resultSet.next()) {
+					Clinic clinic = new Clinic();
+					clinic.setId(resultSet.getInt("id"));
+					clinic.setName(resultSet.getString("name"));
+					clinic.setDescription(resultSet.getString("des"));
+					clinic.setAddress(resultSet.getString("address"));
+					clinic.setWorkingTime(resultSet.getString("working_time"));
+					clinicList.add(clinic);
+				}
+			}
+		} catch (SQLException e) {
+			System.err.println("Lỗi khi tìm kiếm phòng khám: " + e.getMessage());
+			e.printStackTrace();
+		}
+
+		return clinicList;
+	}
+
 }

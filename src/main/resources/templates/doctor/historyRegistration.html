@@ -166,7 +166,10 @@
             </table>
         </div>
         
-        
+           <div class="d-flex justify-content-between align-items-center mt-3">
+                        <!-- Tổng số bản ghi -->
+                        <p class="mb-0">Trang <span th:text="${currentPage}"></span> / <span th:text="${totalPages}"></span> trang</p>
+                
             <!-- Phân trang -->
     <div class="pagination-container mt-3">
         <nav aria-label="Page navigation">
@@ -174,18 +177,18 @@
                 
                 <!-- Nút Trang trước -->
                 <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
-                    <a class="page-link" th:href="@{/doctor/quan-ly-dat-lich(page=${currentPage - 1})}" tabindex="-1">Trang trước</a>
+                    <a class="page-link" th:href="@{/doctor/lich-su-kham-benh(page=${currentPage - 1})}" tabindex="-1">Trang trước</a>
                 </li>
                 
                 <!-- Hiển thị thông tin các trang -->
                 <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
                     th:classappend="${currentPage == i} ? 'active'">
-                    <a class="page-link" th:href="@{/doctor/quan-ly-dat-lich(page=${i})}" th:text="${i + 1}">1</a>
+                    <a class="page-link" th:href="@{/doctor/lich-su-kham-benh(page=${i})}" th:text="${i + 1}">1</a>
                 </li>
                 
                 <!-- Nút Trang sau -->
                 <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
-                    <a class="page-link" th:href="@{/doctor/quan-ly-dat-lich(page=${currentPage + 1})}">Trang sau</a>
+                    <a class="page-link" th:href="@{/doctor/lich-su-kham-benh(page=${currentPage + 1})}">Trang sau</a>
                 </li>
             </ul>
         </nav>
