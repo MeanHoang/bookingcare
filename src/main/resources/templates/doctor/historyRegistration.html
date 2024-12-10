@@ -107,7 +107,7 @@
                     <i class="bi bi-list-task me-2"></i>Thời khóa biểu
                 </a>
             </li>
-                        <li class="nav-item">
+            <li class="nav-item">
                 <a class="nav-link" href="/doctor/lich-su-kham-benh">
                     <i class="bi bi-clock-history me-2"></i>Lịch sử
                 </a>
@@ -129,7 +129,7 @@
 
     <!-- Nội dung chính -->
     <div class="content container mt-5">
-            <h1>Quản lý đặt lịch khám</h1>
+            <h1>Lịch sử khám</h1>
         
         <!-- Bảng danh sách đặt lịch -->
         <div class="table-container bg-white p-4 rounded shadow-sm">
@@ -157,20 +157,10 @@
                         <td th:text="${registration.day}">0123456789</td>
                         <td th:text="${registration.note}">Lý do khám</td>
                         <td>
-                            <form th:action="@{/doctor/confirm-reg}" method="post" style="display:inline;">
-                                <input type="hidden" name="registrationId" th:value="${registration.id}">
-                                <button type="submit" class="btn btn-success btn-sm btn-confirm">✔️ Xác nhận</button>
-                            </form>
-                    
-                            <form th:action="@{/doctor/cancel-reg}" method="post" style="display:inline;">
-                                <input type="hidden" name="registrationId" th:value="${registration.id}">
-                                <button type="submit" class="btn btn-danger btn-sm btn-cancel">❌ Hủy</button>
-                            </form>
-                                                        <form th:action="@{|/doctor/thong-tin-don-dat/${registration.id}|}" method="get" style="display:inline;">
+                            <form th:action="@{|/doctor/thong-tin-don-dat/${registration.id}|}" method="get" style="display:inline;">
                                 <input type="hidden" name="registrationId" th:value="${registration.id}">
                                 <button type="submit" class="btn btn-success btn-sm btn-confirm">Chi tiết</button>
                             </form>
-                        </td>
                     </tr>
                 </tbody>
             </table>

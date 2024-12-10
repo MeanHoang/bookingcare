@@ -36,10 +36,11 @@ public class RegCofirmController {
 	public String confirmRegistration(@RequestParam("fullname") String fullname, @RequestParam("gender") String gender,
 			@RequestParam("birthday") Date birthday, @RequestParam("phonenumber") String phonenumber,
 			@RequestParam("email") String email, @RequestParam("province") String province,
-			@RequestParam("district") String district, @RequestParam("commune") String commune,
-			@RequestParam(value = "note", required = false) String note, @RequestParam("doctorId") Integer doctorId,
-			@RequestParam("scheduleId") Integer scheduleId, @RequestParam("selectedDay") Date selectedDay,
-			@RequestParam("timeslotName") String timeslotName, Model model) throws SQLException {
+			@RequestParam("price") int price, @RequestParam("district") String district,
+			@RequestParam("commune") String commune, @RequestParam(value = "note", required = false) String note,
+			@RequestParam("doctorId") Integer doctorId, @RequestParam("scheduleId") Integer scheduleId,
+			@RequestParam("selectedDay") Date selectedDay, @RequestParam("timeslotName") String timeslotName,
+			Model model) throws SQLException {
 
 		Registration registration = new Registration();
 		Clinic clinic = clinicService.getClinicById(doctorId);
@@ -49,6 +50,7 @@ public class RegCofirmController {
 		registration.setTimeslotName(timeslotName);
 		registration.setClinicAddress(clinic.getAddress());
 		registration.setDay(selectedDay);
+		registration.setPrice(price);
 		registration.setFullName(fullname);
 		registration.setGender(gender);
 		registration.setBirthday(birthday);

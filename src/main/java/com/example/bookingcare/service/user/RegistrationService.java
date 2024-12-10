@@ -30,6 +30,15 @@ public interface RegistrationService {
 
 	List<Registration> getRegistrationByDoctorIdAndIsNotActive(int doctorId, int page, int size);
 
+	List<Registration> getRegistrationByDoctorIdAndIsActive(int doctorId, int page, int size);
+
 	int countRegistrationByDoctorIdAndIsNotActive(int doctorId);
 
+	int countUserByDoctorID(int doctoId);
+
+	int countRegistrationByDoctorIdAndIsActive(int doctorID);
+
+	int countRevenueByDoctorIdAndIsActive(int doctorId);
+
+	int countUserFromByDoctorId(String address, int doctorId);
 }

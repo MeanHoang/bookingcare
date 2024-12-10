@@ -130,6 +130,12 @@
                     <i class="bi bi-list-task me-2"></i>Thời khóa biểu
                 </a>
             </li>
+                        <li class="nav-item">
+                <a class="nav-link" href="/doctor/lich-su-kham-benh">
+                    <i class="bi bi-clock-history me-2"></i>Lịch sử
+                </a>
+            </li>
+
             <li class="nav-item">
                 <a class="nav-link" href="/doctor/thong-tin-ca-nhan">
                     <i class="bi bi-person-circle me-2"></i>Thông tin cá nhân
@@ -156,7 +162,7 @@
                     <div class="card-body">
                         <i class="bi bi-people"></i>
                         <div>
-                            <div class="stat">134</div>
+                            <div class="stat" th:text="${soLuongNguoiDung}"></div>
                             <div>Người dùng</div>
                         </div>
                     </div>
@@ -167,8 +173,8 @@
                     <div class="card-body">
                         <i class="bi bi-person-badge"></i>
                         <div>
-                            <div class="stat">567</div>
-                            <div>Bác sĩ</div>
+                            <div class="stat" th:text="${soLuongDaKham}"></div>
+                            <div>Đã khám</div>
                         </div>
                     </div>
                 </div>
@@ -178,7 +184,7 @@
                     <div class="card-body">
                         <i class="bi bi-currency-dollar"></i>
                         <div>
-                            <div class="stat">$12,345</div>
+                            <div class="stat"  th:text="${doanhThu}"></div>
                             <div>Doanh thu</div>
                         </div>
                     </div>
@@ -189,8 +195,8 @@
                     <div class="card-body">
                         <i class="bi bi-bar-chart"></i>
                         <div>
-                            <div class="stat">25</div>
-                            <div>Lịch khám</div>
+                            <div class="stat"  th:text="${soLuongDonCanDuyet}"></div>
+                            <div>Đơn đặt</div>
                         </div>
                     </div>
                 </div>
@@ -246,30 +252,53 @@
                 </table>
             </div>
         </div>
+        
+        
 <div id="chartData" class="hidden"
-         th:data-thang10="${soLuongThang10}" 
-         th:data-thang11="${soLuongThang11}" 
-         th:data-thang12="${soLuongThang12}">
-    </div>
+     th:data-thang10="${soLuongThang10}" 
+     th:data-thang11="${soLuongThang11}" 
+     th:data-thang12="${soLuongThang12}"
+     th:data-nguoidunghn="${soLuongNguoiDungTuHaNoi}"
+     th:data-nguoidunghcm="${soLuongNguoiDungTuHCM}"
+     th:data-nguoidung="${soLuongDaKham}">
+</div>
+
     </div>
 
     <!-- Bootstrap và Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script>
     const chartData = document.getElementById('chartData');
-    const soLuongThang10 = parseInt(chartData.dataset.thang10, 10)*100;
-    const soLuongThang11 = parseInt(chartData.dataset.thang11, 10)*100;
-    const soLuongThang12 = parseInt(chartData.dataset.thang12, 10)*100;
+    console.log("Chart Data:", chartData.dataset);
 
-        // Biểu đồ thống kê doanh thu theo tháng
+    const soLuongThang10 = parseInt(chartData.dataset.thang10, 10) || 0;
+    const soLuongThang11 = parseInt(chartData.dataset.thang11, 10) || 0;
+    const soLuongThang12 = parseInt(chartData.dataset.thang12, 10) || 0;
+    const soLuongNguoiDungTuHaNoi = parseInt(chartData.dataset.nguoidunghn, 10) || 0;
+    const soLuongNguoiDungTuHCM = parseInt(chartData.dataset.nguoidunghcm, 10) || 0;
+    const soLuongNguoiDung = parseInt(chartData.dataset.nguoidung, 10) || 0;
+
+    console.log("Tháng 10: ", soLuongThang10);
+    console.log("Tháng 11: ", soLuongThang11);
+    console.log("Tháng 12: ", soLuongThang12);
+    console.log("Số lượng người dùng từ Hà Nội: ", soLuongNguoiDungTuHaNoi);
+    console.log("Số lượng người dùng từ HCM: ", soLuongNguoiDungTuHCM);
+    console.log("Tổng người dùng: ", soLuongNguoiDung);
+
+    const khac = soLuongNguoiDung - soLuongNguoiDungTuHCM - soLuongNguoiDungTuHaNoi;
+    console.log("Khác: ", khac);
+
+
+    
+    // Biểu đồ thống kê doanh thu theo tháng
         const ctxRevenue = document.getElementById('revenueChart').getContext('2d');
         const revenueChart = new Chart(ctxRevenue, {
             type: 'bar',
             data: {
-                labels: ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4'],
+                labels: ['Tháng 10', 'Tháng 11', 'Tháng 12'],
                 datasets: [{
-                    label: 'Doanh thu ($)',
-                    data: [soLuongThang10, soLuongThang12, soLuongThang11, soLuongThang12],
+                    label: 'Số lượng người dùng',
+                    data: [soLuongThang10, soLuongThang11, soLuongThang12],
                     backgroundColor: '#00bcd4',
                     borderColor: '#00bcd4',
                     borderWidth: 1
@@ -284,7 +313,7 @@
             data: {
                 labels: ['Hà Nội', 'Hồ Chí Minh', 'Khác'],
                 datasets: [{
-                    data: [45, 50, 5],
+                    data: [soLuongNguoiDungTuHaNoi, soLuongNguoiDungTuHCM, khac],
                     backgroundColor: ['#00bcd4', '#ff9800', '#4caf50'],
                     hoverOffset: 4
                 }]

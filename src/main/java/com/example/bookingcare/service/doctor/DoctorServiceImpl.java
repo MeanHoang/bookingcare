@@ -29,7 +29,7 @@ public class DoctorServiceImpl implements DoctorService {
 	@Override
 	public List<Doctor> getAllDoctors() {
 		List<Doctor> doctorList = new ArrayList<>();
-		String sql = "SELECT * FROM doctor";
+		String sql = "SELECT * FROM doctor LIMIT 8";
 
 		try (Connection connection = connectionPool.getConnection("DoctorService");
 				PreparedStatement preparedStatement = connection.prepareStatement(sql);

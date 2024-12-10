@@ -394,6 +394,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 		List<Registration> registrations = new ArrayList<>();
 		String sql = "SELECT * FROM registration WHERE doctor_id = ? AND is_active = false AND day >= CURDATE() LIMIT ? OFFSET ?";
 		System.out.println("Executing SQL: " + sql);
+		int offset = (page - 1) * size;
 
 		try (Connection connection = connectionPool.getConnection("RegistrationService");
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -401,7 +402,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 			// Gán tham số cho câu lệnh SQL
 			preparedStatement.setInt(1, doctorId);
 			preparedStatement.setInt(2, size);
-			preparedStatement.setInt(3, page * size);
+			preparedStatement.setInt(3, offset);
 
 			// Thực thi câu lệnh
 			ResultSet resultSet = preparedStatement.executeQuery();
@@ -427,7 +428,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 				registration.setClinicAddress(resultSet.getString("clinic_address"));
 
 				registrations.add(registration);
-				System.out.println("Loaded Registration: " + registration.getFullName());
+				System.out.println("Loaded Registration: " + registration.toString());
 			}
 		} catch (SQLException e) {
 			System.out
@@ -448,6 +449,154 @@ public class RegistrationServiceImpl implements RegistrationService {
 
 			// Gán tham số cho câu lệnh SQL
 			preparedStatement.setInt(1, doctorId);
+
+			// Thực thi câu lệnh
+			ResultSet resultSet = preparedStatement.executeQuery();
+			if (resultSet.next()) {
+				totalRegistrations = resultSet.getInt("total");
+			}
+		} catch (SQLException e) {
+			System.out
+					.println("Error while counting registrations by Doctor ID and inactive status: " + e.getMessage());
+			e.printStackTrace();
+		}
+
+		return totalRegistrations;
+	}
+
+	@Override
+	public int countUserByDoctorID(int doctoId) {
+		String sql = "SELECT COUNT(*) AS unique_patient_count FROM (SELECT fullname, phone_number,email FROM registration WHERE doctor_id = ? GROUP BY fullname, phone_number, email) AS unique_patients";
+		System.out.println("Executing SQL: " + sql);
+
+		try (Connection connection = connectionPool.getConnection("RegistrationService");
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+			// Gán tham số tháng vào câu lệnh SQL
+			preparedStatement.setInt(1, doctoId);
+
+			// Thực thi câu lệnh và lấy kết quả
+			ResultSet resultSet = preparedStatement.executeQuery();
+
+			if (resultSet.next()) {
+				int count = resultSet.getInt("unique_patient_count");
+				return count;
+			}
+		} catch (SQLException e) {
+			System.out.println("Error while counting registrations for unique_patient_count: " + e.getMessage());
+			e.printStackTrace();
+		}
+
+		return 0;
+	}
+
+	@Override
+	public int countRegistrationByDoctorIdAndIsActive(int doctorID) {
+		int count = 0;
+		String query = "SELECT COUNT(*) FROM registration WHERE doctor_id = ? AND is_active = true";
+
+		try (Connection connection = connectionPool.getConnection("RegistrationService");
+				PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+
+			preparedStatement.setInt(1, doctorID);
+
+			try (ResultSet resultSet = preparedStatement.executeQuery()) {
+				if (resultSet.next()) {
+					count = resultSet.getInt(1);
+				}
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return count;
+	}
+
+	@Override
+	public int countRevenueByDoctorIdAndIsActive(int doctorId) {
+		int totalRevenue = 0;
+
+		String query = "SELECT SUM(price) FROM registration WHERE doctor_id = ? AND is_active = true";
+
+		try (Connection connection = connectionPool.getConnection("RegistrationService");
+				PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+			preparedStatement.setInt(1, doctorId);
+
+			try (ResultSet resultSet = preparedStatement.executeQuery()) {
+				if (resultSet.next()) {
+					totalRevenue = resultSet.getInt(1);
+				}
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return totalRevenue;
+	}
+
+	@Override
+	public List<Registration> getRegistrationByDoctorIdAndIsActive(int doctorId, int page, int size) {
+		List<Registration> registrations = new ArrayList<>();
+		String sql = "SELECT * FROM registration WHERE doctor_id = ? AND is_active = true AND day >= CURDATE() LIMIT ? OFFSET ?";
+		System.out.println("Executing SQL: " + sql);
+		int offset = (page - 1) * size;
+
+		try (Connection connection = connectionPool.getConnection("RegistrationService");
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+			// Gán tham số cho câu lệnh SQL
+			preparedStatement.setInt(1, doctorId);
+			preparedStatement.setInt(2, size);
+			preparedStatement.setInt(3, offset);
+
+			// Thực thi câu lệnh
+			ResultSet resultSet = preparedStatement.executeQuery();
+
+			while (resultSet.next()) {
+				Registration registration = new Registration();
+				registration.setId(resultSet.getInt("id"));
+				registration.setDoctorId(resultSet.getInt("doctor_id"));
+				registration.setScheduleId(resultSet.getInt("schedule_id"));
+				registration.setTimeslotName(resultSet.getString("timeslot_name"));
+				registration.setFullName(resultSet.getString("fullname"));
+				registration.setDay(resultSet.getDate("day"));
+				registration.setGender(resultSet.getString("gender"));
+				registration.setBirthday(resultSet.getDate("birthday"));
+				registration.setPhoneNumber(resultSet.getString("phone_number"));
+				registration.setEmail(resultSet.getString("email"));
+				registration.setProvince(resultSet.getString("province"));
+				registration.setDistrict(resultSet.getString("district"));
+				registration.setCommune(resultSet.getString("commune"));
+				registration.setPrice(resultSet.getInt("price"));
+				registration.setNote(resultSet.getString("note"));
+				registration.setActive(resultSet.getBoolean("is_active"));
+				registration.setClinicAddress(resultSet.getString("clinic_address"));
+
+				registrations.add(registration);
+				System.out.println("Loaded Registration: " + registration.toString());
+			}
+		} catch (SQLException e) {
+			System.out
+					.println("Error while fetching registrations by Doctor ID and inactive status: " + e.getMessage());
+			e.printStackTrace();
+		}
+		return registrations;
+	}
+
+	@Override
+	public int countUserFromByDoctorId(String address, int doctorId) {
+		String sql = "SELECT COUNT(*) AS total FROM registration WHERE doctor_id = ? AND province = ? AND is_active = true";
+		System.out.println("Executing SQL: " + sql);
+		int totalRegistrations = 0;
+
+		try (Connection connection = connectionPool.getConnection("RegistrationService");
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+			// Gán tham số cho câu lệnh SQL
+			preparedStatement.setInt(1, doctorId);
+			preparedStatement.setString(2, address);
 
 			// Thực thi câu lệnh
 			ResultSet resultSet = preparedStatement.executeQuery();
