@@ -26,4 +26,8 @@ public interface ClinicService {
 
 	List<Clinic> getClinicsByName(String name);
 
+	int getTotalClinics();
+
+
+
 }

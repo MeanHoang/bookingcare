@@ -57,12 +57,26 @@
             border-radius: 5px;
         }
 
+       
         /* Nội dung chính */
-        .content {
-            margin-left: 270px;
+             .content {
+            margin-left: 250px;
             padding: 20px;
             background-color: #f4f5f7;
             min-height: 100vh;
+            transition: margin-left 0.3s ease; /* Hiệu ứng thay đổi nội dung */
+            width: calc(100% - 250px); /* Giới hạn độ rộng nội dung */
+        }
+         /* Media Queries cho việc ẩn sidebar trên thiết bị nhỏ */
+        @media (max-width: 768px) {
+            .navbar-vertical {
+                transform: translateX(-100%); /* Ẩn sidebar */
+            }
+
+            .content {
+                margin-left: 0; /* Nội dung chiếm toàn bộ chiều rộng */
+                width: 100%; /* Nội dung chiếm toàn bộ chiều rộng */
+            }
         }
 
         .table-container h3 {
@@ -109,7 +123,7 @@
             </a>
             <ul class="navbar-nav flex-column mt-3">
                 <li class="nav-item">
-                    <a class="nav-link active" href="/admin/home">
+                    <a class="nav-link " href="/admin/home">
                         <i class="bi bi-house-door"></i> Trang chủ
                     </a>
                 </li>
@@ -119,18 +133,13 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/admin/quan-ly-chuyen-khoa">
+                    <a class="nav-link active" href="/admin/quan-ly-chuyen-khoa">
                         <i class="bi bi-journal-medical"></i> Quản lý chuyên khoa
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/admin/quan-ly-bac-sy">
                         <i class="bi bi-person-badge"></i> Quản lý bác sĩ
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/admin/giao-dich">
-                        <i class="bi bi-credit-card"></i> Quản lý giao dịch
                     </a>
                 </li>
                 <li class="nav-item">
@@ -177,13 +186,22 @@
                             <td>
                                 <img th:src="@{|/images/${specialty.logoSpecialty}|}" alt="Logo" class="img-fluid" style="max-width: 50px;">
                             </td>
-                            <td class="text-center">
-                                <a th:href="@{/admin/sua-chuyen-khoa(id=${specialty.id})}" class="btn btn-warning btn-sm">Sửa</a>
-                                <form th:action="@{/admin/xoa-chuyen-khoa}" method="post" onsubmit="return confirm('Bạn có chắc chắn muốn xóa chuyên khoa này không?');">
-                                    <input type="hidden" name="id" th:value="${specialty.id}">
-                                    <button type="submit" class="btn btn-danger btn-sm">Xóa</button>
-                                </form>
-                            </td>
+                           	<td class="text-center">
+							    <!-- Div for stacking buttons vertically -->
+							    <div class="d-flex flex-column gap-2">
+							        <!-- Liên kết sửa thông tin chuyên khoa -->
+							        <a th:href="@{/admin/sua-chuyen-khoa(id=${specialty.id})}" class="btn btn-warning btn-sm" style="width: 120px;">Sửa</a>
+							        
+							        <!-- Form xóa chuyên khoa -->
+							        <form th:action="@{/admin/xoa-chuyen-khoa}" method="post" onsubmit="return confirm('Bạn có chắc chắn muốn xóa chuyên khoa này không?');">
+							            <input type="hidden" name="id" th:value="${specialty.id}">
+							            <button type="submit" class="btn btn-danger btn-sm" style="width: 120px;">Xóa</button>
+							        </form>
+							
+							        <!-- Liên kết xem chi tiết chuyên khoa -->
+							        <a th:href="@{/admin/thong-tin-chuyen-khoa(id=${specialty.id})}" class="btn btn-info btn-sm" style="width: 120px;">Xem chi tiết</a>
+							    </div>
+							</td>
                         </tr>
                     </tbody>
                 </table>

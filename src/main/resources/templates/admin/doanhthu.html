@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Danh Sách Cơ Sở Y Tế</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        /* Tùy chỉnh logo */
+        .navbar-brand {
+            font-size: 30px;
+            font-weight: bold;
+            color: #00bcd4;
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        .navbar-brand span {
+            color: #ff9800;
+        }
+
+        .navbar-vertical {
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 250px;
+            background-color: #f8f9fa;
+            box-shadow: 4px 0px 15px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .navbar-nav .nav-link {
+            font-size: 18px;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #333;
+        }
+
+        .navbar-nav .nav-link:hover {
+            background-color: #00bcd4;
+            color: #fff;
+            border-radius: 5px;
+        }
+
+        .navbar-nav .nav-link.active {
+            background-color: #ff9800;
+            color: #fff;
+            font-weight: bold;
+            border-radius: 5px;
+        }
+
+        /* Nội dung chính */
+        .content {
+            margin-left: 250px;
+            padding: 20px;
+            background-color: #f4f5f7;
+            min-height: 100vh;
+            transition: margin-left 0.3s ease; /* Hiệu ứng thay đổi nội dung */
+            width: calc(100% - 250px); /* Giới hạn độ rộng nội dung */
+        }
+
+        .table-container h3 {
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            font-size: 14px;
+        }
+
+        .btn-add-facility {
+            font-size: 16px;
+            padding: 8px 12px;
+            background-color: #28a745;
+            color: white;
+            border-radius: 30px;
+            display: inline-block;
+            margin-top: 20px;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+            line-height: 1.5;
+            max-width: 250px;
+            width: auto;
+        }
+
+        .btn-add-facility i {
+            margin-right: 8px;
+            font-size: 18px;
+        }
+
+        .btn-primary { 
+            white-space: nowrap; /* Ngăn chữ xuống dòng */
+            font-size: 15px;
+        }
+        
+        /* Media Queries cho việc ẩn sidebar trên thiết bị nhỏ */
+        @media (max-width: 992px) {
+            .navbar-vertical {
+                transform: translateX(-100%); /* Ẩn sidebar */
+            }
+
+            .content {
+                margin-left: 0; /* Nội dung chiếm toàn bộ chiều rộng */
+                width: 100%; /* Nội dung chiếm toàn bộ chiều rộng */
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-light bg-light navbar-vertical">
+        <div class="container-fluid flex-column">
+            <a class="navbar-brand" href="#">
+                <span>Admin</span>Care
+            </a>
+            <ul class="navbar-nav flex-column mt-3">
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/home">
+                        <i class="bi bi-house-door"></i> Trang chủ
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link " href="/admin/quan-ly-csyt">
+                        <i class="bi bi-hospital"></i> Quản lý cơ sở y tế
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/quan-ly-chuyen-khoa">
+                        <i class="bi bi-journal-medical"></i> Quản lý chuyên khoa
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/quan-ly-bac-sy">
+                        <i class="bi bi-person-badge"></i> Quản lý bác sĩ
+                    </a>
+                </li>
+                <li class="nav-item ">
+                    <a class="nav-link active" href="/admin/doanh-thu">
+                        <i class="bi bi-bar-chart"></i> Doanh thu
+                    </a>
+                </li>
+                 <li class="nav-item">
+                    <a class="nav-link" href="/admin/thong-tin-ca-nhan">
+                        <i class="bi bi-person"></i> Thông tin cá nhân
+                    </a>
+                </li>
+                <li class="nav-item mt-auto">
+                    <a class="nav-link text-danger" href="/admin/dang-xuat">
+                        <i class="bi bi-box-arrow-right"></i> Đăng xuất
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="content">
+        <h1  class="text-center">Doanh Thu</h1>
+
+        <!-- Form lọc doanh thu -->
+        <form action="/admin/ket-qua-doanh-thu" method="get">
+            <div class="mb-3">
+                <label for="date" class="form-label">Ngày:</label>
+                <input type="date" id="date" name="date" class="form-control" th:value="${param.date}">
+            </div>
+
+            <div class="mb-3">
+                <label for="month" class="form-label">Tháng:</label>
+                <select id="month" name="month" class="form-select">
+                    <option value="" th:selected="${param.month == null}">Chọn tháng</option>
+                    <option th:value="1" th:selected="${param.month == 1}">Tháng 1</option>
+                    <option th:value="2" th:selected="${param.month == 2}">Tháng 2</option>
+                    <option th:value="3" th:selected="${param.month == 3}">Tháng 3</option>
+                    <option th:value="4" th:selected="${param.month == 4}">Tháng 4</option>
+                    <option th:value="5" th:selected="${param.month == 5}">Tháng 5</option>
+                    <option th:value="6" th:selected="${param.month == 6}">Tháng 6</option>
+                    <option th:value="7" th:selected="${param.month == 7}">Tháng 7</option>
+                    <option th:value="8" th:selected="${param.month == 8}">Tháng 8</option>
+                    <option th:value="9" th:selected="${param.month == 9}">Tháng 9</option>
+                    <option th:value="10" th:selected="${param.month == 10}">Tháng 10</option>
+                    <option th:value="11" th:selected="${param.month == 11}">Tháng 11</option>
+                    <option th:value="12" th:selected="${param.month == 12}">Tháng 12</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="year" class="form-label">Năm:</label>
+                <input type="number" id="year" name="year" class="form-control" th:value="${param.year}">
+            </div>
+
+            <button type="submit" class="btn btn-primary">Lọc</button>
+        </form>
+
+        <!-- Bảng doanh thu -->
+        <div class="table-container mt-4">
+            <h3>Danh Sách Doanh Thu</h3>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Bác Sĩ</th>
+                        <th>Doanh Thu</th>
+                    </tr>
+                </thead>
+                <tbody>
+    <tr th:each="revenue : ${revenueList}">
+                <td th:text="${revenue['bacSi']}"></td>
+                <td th:text="${revenue['doanhThu']}"></td>
+            </tr>             </tbody>
+            </table>
+        </div>
+    </div>
+    
+</body>
+</html>

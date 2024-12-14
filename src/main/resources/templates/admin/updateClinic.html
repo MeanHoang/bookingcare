@@ -58,12 +58,25 @@
             border-radius: 5px;
         }
 
-        /* Nội dung chính */
-        .content {
-            margin-left: 270px;
+         /* Nội dung chính */
+             .content {
+            margin-left: 250px;
             padding: 20px;
             background-color: #f4f5f7;
             min-height: 100vh;
+            transition: margin-left 0.3s ease; /* Hiệu ứng thay đổi nội dung */
+            width: calc(100% - 250px); /* Giới hạn độ rộng nội dung */
+        }
+         /* Media Queries cho việc ẩn sidebar trên thiết bị nhỏ */
+        @media (max-width: 768px) {
+            .navbar-vertical {
+                transform: translateX(-100%); /* Ẩn sidebar */
+            }
+
+            .content {
+                margin-left: 0; /* Nội dung chiếm toàn bộ chiều rộng */
+                width: 100%; /* Nội dung chiếm toàn bộ chiều rộng */
+            }
         }
     </style>
 </head>
@@ -98,11 +111,6 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/admin/giao-dich">
                         <i class="bi bi-credit-card"></i> Quản lý giao dịch
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/admin/doanh-thu">
-                        <i class="bi bi-bar-chart"></i> Doanh thu
                     </a>
                 </li>
                 <li class="nav-item mt-auto">

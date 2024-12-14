@@ -460,4 +460,25 @@ public class DoctorServiceImpl implements DoctorService {
 		}
 		return doctorList;
 	}
+	
+	@Override
+	public int getTotalDoctors() {
+	    String sql = "SELECT COUNT(*) FROM doctor";
+	    int totalDoctors = 0;
+
+	    try (Connection connection = connectionPool.getConnection("DoctorService");
+	         PreparedStatement preparedStatement = connection.prepareStatement(sql);
+	         ResultSet resultSet = preparedStatement.executeQuery()) {
+
+	        if (resultSet.next()) {
+	            totalDoctors = resultSet.getInt(1);
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+
+	    return totalDoctors;
+	}
+
+
 }

@@ -26,4 +26,6 @@ public interface SpecialtyService {
 
 	List<Specialty> findSpecialtyByName(String name);
 
+	int getTotalSpecialties();
+
 }

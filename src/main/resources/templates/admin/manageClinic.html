@@ -60,10 +60,12 @@
 
         /* Nội dung chính */
         .content {
-            margin-left: 270px;
+            margin-left: 250px;
             padding: 20px;
             background-color: #f4f5f7;
             min-height: 100vh;
+            transition: margin-left 0.3s ease; /* Hiệu ứng thay đổi nội dung */
+            width: calc(100% - 250px); /* Giới hạn độ rộng nội dung */
         }
 
         .table-container h3 {
@@ -99,6 +101,20 @@
         font-size: 15px;
         
     }
+    
+        /* Media Queries cho việc ẩn sidebar trên thiết bị nhỏ */
+        @media (max-width: 992px) {
+        
+            .navbar-vertical {
+                transform: translateX(-100%); /* Ẩn sidebar */
+            }
+
+            .content {
+                margin-left: 0; /* Nội dung chiếm toàn bộ chiều rộng */
+                width: 100%; /* Nội dung chiếm toàn bộ chiều rộng */
+            }
+        }
+        
     </style>
 </head>
 <body>
@@ -126,11 +142,6 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/admin/quan-ly-bac-sy">
                         <i class="bi bi-person-badge"></i> Quản lý bác sĩ
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/admin/giao-dich">
-                        <i class="bi bi-credit-card"></i> Quản lý giao dịch
                     </a>
                 </li>
                 <li class="nav-item">
@@ -182,13 +193,23 @@
                             <td th:text="${clinic.description}">Mô Tả</td>
                             <td th:text="${clinic.address}">Địa Chỉ</td>
                             <td th:text="${clinic.workingTime}">Thời Gian Làm Việc</td>
-                            <td>
-                                <a th:href="@{/admin/sua-csyt(id=${clinic.id})}" class="btn btn-warning btn-sm">Sửa</a>
-                                <form th:action="@{/admin/xoa-csyt}" method="post" onsubmit="return confirm('Bạn có chắc chắn muốn xóa?');" class="d-inline">
-                                    <input type="hidden" name="id" th:value="${clinic.id}">
-                                    <button type="submit" class="btn btn-danger btn-sm">Xóa</button>
-                                </form>
-                            </td>
+							<td class="text-center">
+							   <div class="d-flex flex-column gap-2">
+							       <!-- Liên kết sửa thông tin chuyên khoa -->
+							       <a th:href="@{/admin/sua-csyt(id=${clinic.id})}" class="btn btn-warning btn-sm" style="width: 120px;">Sửa</a>
+							       
+							       <!-- Form xóa chuyên khoa -->
+							       <form th:action="@{/admin/xoa-csyt}" method="post" onsubmit="return confirm('Bạn có chắc chắn muốn xóa chuyên khoa này không?');">
+							           <input type="hidden" name="id" th:value="${clinic.id}">
+							           <button type="submit" class="btn btn-danger btn-sm" style="width: 120px;">Xóa</button>
+							       </form>
+							
+							       <!-- Liên kết xem chi tiết chuyên khoa -->
+							       <a th:href="@{/admin/thong-tin-csyt(id=${clinic.id})}" class="btn btn-info btn-sm" style="width: 120px;">Xem chi tiết</a>
+							   </div>
+								</td>
+
+
                         </tr>
                     </tbody>
                 </table>

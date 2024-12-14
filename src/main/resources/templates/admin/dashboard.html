@@ -4,14 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
+    <title>Bảng điều khiển Admin</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        /* Tùy chỉnh logo */
         .navbar-brand {
             font-size: 30px;
             font-weight: bold;
@@ -31,10 +30,11 @@
             left: 0;
             width: 250px;
             background-color: #f8f9fa;
-            box-shadow: 4px 0px 15px rgba(0, 0, 0, 0.1);
+            box-shadow: 4px 0px 15px rgba(0, 0, 0, 0.3);
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            transition: transform 0.3s ease;
         }
 
         .navbar-nav .nav-link {
@@ -59,18 +59,19 @@
             border-radius: 5px;
         }
 
-        /* Nội dung chính */
         .content {
             margin-left: 270px;
             padding: 20px;
             background-color: #f4f5f7;
             min-height: 100vh;
+            transition: margin-left 0.3s ease;
+            word-wrap: break-word;
         }
 
         .summary-card {
             border: none;
             border-radius: 10px;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
         }
 
         .summary-card .card-body {
@@ -89,33 +90,55 @@
             font-weight: bold;
         }
 
-        /* Style cho biểu đồ */
         .chart-container {
             max-width: 100%;
             margin-top: 20px;
         }
 
-        .table-hover th, .table-hover td {
+        .table-hover th,
+        .table-hover td {
             text-align: center;
         }
 
-        /* Thẻ thống kê */
         .table-card {
             margin-top: 20px;
         }
 
-        /* Cập nhật kích thước biểu đồ hình tròn */
-		.pie-chart-container {
-		    width: 300px; 
-		    height: 300px;
-		    margin: auto;
-		}
+        .pie-chart-container {
+            width: 300px;
+            height: 300px;
+            margin: auto;
+        }
+
+        @media (max-width: 1010px) {
+            .navbar-vertical {
+                transform: translateX(-250px);
+            }
+
+            .content {
+                margin-left: 0;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                margin-left: 0;
+                padding: 10px;
+            }
+
+            .summary-card {
+                flex-wrap: wrap;
+                text-align: center;
+            }
+
+            .summary-card .card-body {
+                gap: 10px;
+            }
+        }
     </style>
 </head>
 
 <body>
-
-    <!-- Thanh điều hướng dọc -->
     <nav class="navbar navbar-light bg-light navbar-vertical">
         <div class="container-fluid flex-column">
             <a class="navbar-brand" href="#">
@@ -143,13 +166,13 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/admin/giao-dich">
-                        <i class="bi bi-credit-card"></i> Quản lý giao dịch
+                    <a class="nav-link" href="/admin/doanh-thu">
+                        <i class="bi bi-bar-chart"></i> Doanh thu
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/admin/doanh-thu">
-                        <i class="bi bi-bar-chart"></i> Doanh thu
+                    <a class="nav-link" href="/admin/thong-tin-ca-nhan">
+                        <i class="bi bi-person"></i> Thông tin cá nhân
                     </a>
                 </li>
                 <li class="nav-item mt-auto">
@@ -161,70 +184,68 @@
         </div>
     </nav>
 
-    <!-- Nội dung chính -->
     <div class="content container mt-5">
-        <h1>Chào mừng đến với Admin Dashboard</h1>
+        <h1>Chào mừng đến với Bảng điều khiển Admin</h1>
         <p class="text-muted">Quản lý và giám sát toàn bộ hệ thống một cách hiệu quả.</p>
-
-        <!-- Các thẻ thống kê (4 thẻ) -->
         <div class="row mt-4">
-            <div class="col-md-3">
-                <div class="card summary-card">
-                    <div class="card-body">
-                        <i class="bi bi-people"></i>
-                        <div>
-                            <div class="stat">134</div>
-                            <div>Người dùng</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
+            <div class="col-md-3 col-sm-6">
                 <div class="card summary-card">
                     <div class="card-body">
                         <i class="bi bi-person-badge"></i>
                         <div>
-                            <div class="stat">567</div>
+                            <div class="stat" th:text="${totalDoctors}"></div>
                             <div>Bác sĩ</div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-3">
+            
+            <div class="col-md-3 col-sm-6">
+                <div class="card summary-card">
+                    <div class="card-body">
+                        <i class="bi bi-hospital"></i>
+                        <div>
+                            <div class="stat" th:text="${totalClinics}"></div>
+                            <div>Cơ sở y tế</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-3 col-sm-6">
+                <div class="card summary-card">
+                    <div class="card-body">
+                        <i class="bi bi-journal-medical"></i>
+                        <div>
+                            <div class="stat" th:text="${totalSpecialty}"></div>
+                            <div>Chuyên khoa</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-3 col-sm-6">
                 <div class="card summary-card">
                     <div class="card-body">
                         <i class="bi bi-currency-dollar"></i>
                         <div>
-                            <div class="stat">$12,345</div>
+                            <div class="stat" th:text="${doanhThu} + ' VNĐ'"></div>
                             <div>Doanh thu</div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-3">
-                <div class="card summary-card">
-                    <div class="card-body">
-                        <i class="bi bi-bar-chart"></i>
-                        <div>
-                            <div class="stat">25</div>
-                            <div>Lịch khám</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
 
-        <!-- Biểu đồ thống kê doanh thu -->
         <div class="chart-container row mt-4">
             <div class="col-md-6">
                 <canvas id="revenueChart"></canvas>
             </div>
-   		<div class="col-md-6 pie-chart-container">
-        <canvas id="revenueTypeChart"></canvas>
+            <div class="col-md-6 pie-chart-container">
+                <canvas id="revenueTypeChart"></canvas>
             </div>
         </div>
 
-        <!-- Bảng người dùng -->
         <div class="row table-card mt-4">
             <div class="col-12">
                 <h4>Danh sách người dùng</h4>
@@ -241,19 +262,20 @@
                     <tbody>
                         <tr>
                             <td>1</td>
-                            <td>Trịnh Minh Hoàng</td>
-                            <td>viethoangxtpro08@gmail.com</td>
+                            <td>Nguyễn Kim Nam</td>
+                            <td>namvlog2k3@gmail.com</td>
                             <td><span class="badge bg-success">Hoạt động</span></td>
                             <td>
                                 <button class="btn btn-sm btn-primary">Chi tiết</button>
                                 <button class="btn btn-sm btn-danger">Xóa</button>
                             </td>
                         </tr>
+
                         <tr>
                             <td>2</td>
-                            <td>Trần Thị Liễu</td>
-                            <td>tranthib@example.com</td>
-                            <td><span class="badge bg-danger">Không hoạt động</span></td>
+                            <td>Nguyễn Phương Anh</td>
+                            <td>panh@gmail.com</td>                   
+                            <td><span class="badge bg-warning">Không hoạt động</span></td>
                             <td>
                                 <button class="btn btn-sm btn-primary">Chi tiết</button>
                                 <button class="btn btn-sm btn-danger">Xóa</button>
@@ -263,55 +285,61 @@
                 </table>
             </div>
         </div>
-<div id="chartData" class="hidden"
-         th:data-thang10="${soLuongThang10}" 
-         th:data-thang11="${soLuongThang11}" 
-         th:data-thang12="${soLuongThang12}">
-    </div>
+
+        <!-- Hidden divs for revenue data -->
+        <div id="doanhThuThang9" style="display:none;">[[${doanhThuThang9}]]</div>
+        <div id="doanhThuThang10" style="display:none;">[[${doanhThuThang10}]]</div>
+        <div id="doanhThuThang11" style="display:none;">[[${doanhThuThang11}]]</div>
+        <div id="doanhThuThang12" style="display:none;">[[${doanhThuThang12}]]</div>
+        
     </div>
 
-    <!-- Bootstrap và Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-    const chartData = document.getElementById('chartData');
-    const soLuongThang10 = parseInt(chartData.dataset.thang10, 10)*100;
-    const soLuongThang11 = parseInt(chartData.dataset.thang11, 10)*100;
-    const soLuongThang12 = parseInt(chartData.dataset.thang12, 10)*100;
+        var doanhThuThang9 = document.getElementById("doanhThuThang9").innerText;
+        var doanhThuThang10 = document.getElementById("doanhThuThang10").innerText;
+        var doanhThuThang11 = document.getElementById("doanhThuThang11").innerText;
+        var doanhThuThang12 = document.getElementById("doanhThuThang12").innerText;
 
-        // Biểu đồ thống kê doanh thu theo tháng
-        const ctxRevenue = document.getElementById('revenueChart').getContext('2d');
-        const revenueChart = new Chart(ctxRevenue, {
+        console.log(doanhThuThang9, doanhThuThang10, doanhThuThang11, doanhThuThang12);
+
+        var ctx = document.getElementById('revenueChart').getContext('2d');
+        var revenueChart = new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4'],
+                labels: ['Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'],
                 datasets: [{
-                    label: 'Doanh thu ($)',
-                    data: [soLuongThang10, soLuongThang12, soLuongThang11, soLuongThang12],
+                    label: 'Doanh thu',
+                    data: [doanhThuThang9, doanhThuThang10, doanhThuThang11, doanhThuThang12],
                     backgroundColor: '#00bcd4',
                     borderColor: '#00bcd4',
                     borderWidth: 1
                 }]
-            }
-        });
-
-        // Biểu đồ phân loại doanh thu
-        const ctxRevenueType = document.getElementById('revenueTypeChart').getContext('2d');
-        const revenueTypeChart = new Chart(ctxRevenueType, {
-            type: 'pie',
-            data: {
-                labels: ['Hà Nội', 'Hồ Chí Minh', 'Khác'],
-                datasets: [{
-                    data: [45, 50, 5],
-                    backgroundColor: ['#00bcd4', '#ff9800', '#4caf50'],
-                    hoverOffset: 4
-                }]
             },
             options: {
                 responsive: true,
-                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        var ctx2 = document.getElementById('revenueTypeChart').getContext('2d');
+        var revenueTypeChart = new Chart(ctx2, {
+            type: 'pie',
+            data: {
+                labels: ['Doanh thu tháng 9 ', 'Doanh thu tháng 10' ,"Doanh thu tháng 11","Doanh thu tháng 12"] ,
+                datasets: [{
+                    data: [doanhThuThang9, doanhThuThang10,doanhThuThang11,doanhThuThang12],
+                    backgroundColor: ['#ff9800', '#00bcd4'],
+                    hoverOffset: 4
+                }]
             }
         });
     </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

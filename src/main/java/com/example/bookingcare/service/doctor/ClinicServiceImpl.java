@@ -212,5 +212,29 @@ public class ClinicServiceImpl implements ClinicService {
 
 		return clinicList;
 	}
+	@Override
+	public int getTotalClinics() {
+	    int totalClinics = 0;
+	    String sql = "SELECT COUNT(*) AS total_clinics FROM clinic";
+
+	    try (Connection connection = connectionPool.getConnection("ClinicService");
+	         PreparedStatement preparedStatement = connection.prepareStatement(sql);
+	         ResultSet resultSet = preparedStatement.executeQuery()) {
+
+	        if (resultSet.next()) {
+	            totalClinics = resultSet.getInt("total_clinics");
+	        }
+	    } catch (SQLException e) {
+	        System.err.println("Lỗi khi tính tổng số cơ sở y tế: " + e.getMessage());
+	        e.printStackTrace();
+	    }
+
+	    return totalClinics;
+	}
+	
+
+
+
+	
 
 }

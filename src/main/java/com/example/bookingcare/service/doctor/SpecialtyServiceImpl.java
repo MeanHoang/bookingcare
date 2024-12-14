@@ -236,5 +236,25 @@ public class SpecialtyServiceImpl implements SpecialtyService {
 
 		return specialties;
 	}
+	@Override
+	public int getTotalSpecialties() {
+	    String sql = "SELECT COUNT(*) AS total_specialties FROM specialty"; // Truy vấn đếm số lượng chuyên khoa
+	    int totalSpecialties = 0;
+
+	    try (Connection connection = connectionPool.getConnection("SpecialtyService");
+	         PreparedStatement preparedStatement = connection.prepareStatement(sql);
+	         ResultSet resultSet = preparedStatement.executeQuery()) {
+
+	        if (resultSet.next()) {
+	            totalSpecialties = resultSet.getInt("total_specialties"); // Lấy kết quả đếm
+	        }
+	    } catch (SQLException e) {
+	        System.out.println("Error while counting specialties: " + e.getMessage()); // Xử lý lỗi
+	        e.printStackTrace();
+	    }
+
+	    return totalSpecialties; // Trả về tổng số chuyên khoa
+	}
+
 
 }

@@ -7,7 +7,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -227,6 +229,152 @@ public class AdminServiceImpl implements AdminService {
 
 		return admin; // Trả về đối tượng Admin nếu đăng nhập thành công, ngược lại trả về null
 	}
+
+
+	@Override
+	public List<Map<String, Object>> getRevenueByDate(String inputDate) {
+	    List<Map<String, Object>> revenueList = new ArrayList<>();
+	    String sql = "SELECT r.doctor_id, d.fullname AS doctor_name, SUM(r.price) AS total_revenue " +
+	                 "FROM registration r " +
+	                 "JOIN doctor d ON r.doctor_id = d.id " +  
+	                 "WHERE r.day = ? AND r.is_active = TRUE " +
+	                 "GROUP BY r.doctor_id, d.fullname";  
+	    try (Connection connection = connectionPool.getConnection("AdminService");
+	         PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+	        preparedStatement.setString(1, inputDate); // Set ngày cần tính doanh thu
+
+	        try (ResultSet resultSet = preparedStatement.executeQuery()) {
+	            while (resultSet.next()) {
+	                Map<String, Object> revenueMap = new HashMap<>();
+	                revenueMap.put("doctorId", resultSet.getInt("doctor_id"));
+	                revenueMap.put("doctorName", resultSet.getString("doctor_name"));
+	                revenueMap.put("totalRevenue", resultSet.getInt("total_revenue"));
+	                revenueList.add(revenueMap);
+	            }
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return revenueList;
+	}
+
+
+
+	@Override
+	public List<Map<String, Object>> getRevenueByMonth(int year, int month) {
+	    List<Map<String, Object>> revenueList = new ArrayList<>();
+	    String sql = "SELECT r.doctor_id, d.fullname AS doctor_name, SUM(r.price) AS total_revenue " +
+	                 "FROM registration r " +
+	                 "JOIN doctor d ON r.doctor_id = d.id " +  
+	                 "WHERE YEAR(r.day) = ? AND MONTH(r.day) = ? AND r.is_active = TRUE " +
+	                 "GROUP BY r.doctor_id, d.fullname";  
+	    try (Connection connection = connectionPool.getConnection("AdminService");
+	         PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+	        preparedStatement.setInt(1, year);  // Set năm
+	        preparedStatement.setInt(2, month); // Set tháng
+
+	        try (ResultSet resultSet = preparedStatement.executeQuery()) {
+	            while (resultSet.next()) {
+	                Map<String, Object> revenueMap = new HashMap<>();
+	                revenueMap.put("doctorId", resultSet.getInt("doctor_id"));
+	                revenueMap.put("doctorName", resultSet.getString("doctor_name"));
+	                revenueMap.put("totalRevenue", resultSet.getInt("total_revenue"));
+	                revenueList.add(revenueMap);
+	            }
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return revenueList;
+	}
+
+	@Override
+	public List<Map<String, Object>> getRevenueByYear(int year) {
+	    List<Map<String, Object>> revenueList = new ArrayList<>();
+	    String sql = "SELECT r.doctor_id, d.fullname AS doctor_name, SUM(r.price) AS total_revenue " +
+	                 "FROM registration r " +
+	                 "JOIN doctor d ON r.doctor_id = d.id " +  
+	                 "WHERE YEAR(r.day) = ? AND r.is_active = TRUE " +
+	                 "GROUP BY r.doctor_id, d.fullname";  
+	    try (Connection connection = connectionPool.getConnection("AdminService");
+	         PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+	        preparedStatement.setInt(1, year);  // Set năm
+
+	        try (ResultSet resultSet = preparedStatement.executeQuery()) {
+	            while (resultSet.next()) {
+	                Map<String, Object> revenueMap = new HashMap<>();
+	                revenueMap.put("doctorId", resultSet.getInt("doctor_id"));
+	                revenueMap.put("doctorName", resultSet.getString("doctor_name"));
+	                revenueMap.put("totalRevenue", resultSet.getInt("total_revenue"));
+	                revenueList.add(revenueMap);
+	            }
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return revenueList;
+	}
+	@Override
+	public int getTotalRevenueForCurrentMonth() {
+	    int totalRevenue = 0;
+	    String sql = "SELECT SUM(r.price) AS total_revenue " +
+	                 "FROM registration r " +
+	                 "WHERE YEAR(r.day) = ? AND MONTH(r.day) = ? AND r.is_active = TRUE";
+
+	    // Lấy năm và tháng hiện tại
+	    java.util.Calendar calendar = java.util.Calendar.getInstance();
+	    int currentYear = calendar.get(java.util.Calendar.YEAR);
+	    int currentMonth = calendar.get(java.util.Calendar.MONTH) + 1; // Tháng bắt đầu từ 0, nên cần +1
+
+	    try (Connection connection = connectionPool.getConnection("AdminService");
+	         PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+	        // Gán giá trị cho tham số
+	        preparedStatement.setInt(1, currentYear);
+	        preparedStatement.setInt(2, currentMonth);
+
+	        try (ResultSet resultSet = preparedStatement.executeQuery()) {
+	            if (resultSet.next()) {
+	                totalRevenue = resultSet.getInt("total_revenue");
+	            }
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return totalRevenue;
+	}
+
+	public int getTotalRevenueForMonth(int month) {
+	    int totalRevenue = 0;
+	    String sql = "SELECT SUM(r.price) AS total_revenue " +
+	                 "FROM registration r " +
+	                 "WHERE YEAR(r.day) = ? AND MONTH(r.day) = ? AND r.is_active = TRUE";
+
+	    // Lấy năm hiện tại
+	    java.util.Calendar calendar = java.util.Calendar.getInstance();
+	    int currentYear = calendar.get(java.util.Calendar.YEAR);
+
+	    try (Connection connection = connectionPool.getConnection("AdminService");
+	         PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+	        // Gán giá trị cho tham số
+	        preparedStatement.setInt(1, currentYear);
+	        preparedStatement.setInt(2, month);
+
+	        try (ResultSet resultSet = preparedStatement.executeQuery()) {
+	            if (resultSet.next()) {
+	                totalRevenue = resultSet.getInt("total_revenue");
+	            }
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return totalRevenue;
+	}
+
 
 }
 
