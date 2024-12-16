@@ -7,6 +7,7 @@
     <!-- Thêm liên kết đến Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
+<<<<<<< HEAD
  		/* Tùy chỉnh thêm cho logo */
         .navbar-brand {
             font-size: 24px;
@@ -16,6 +17,16 @@
         .navbar-brand span {
             color: #ff9800; 
         }
+=======
+	    .navbar-brand {
+	        font-size: 24px;
+	        font-weight: bold;
+	        color: #00bcd4; 
+	    }
+	    .navbar-brand span {
+	        color: #ff9800;
+	    }
+>>>>>>> 603310b5ae8ab5228972e8e4b58b5e7385507c13
 	    .card {
 	        border: 1px solid #ddd;
 	        border-radius: 8px;
@@ -43,7 +54,11 @@
     <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
         <div class="container-fluid">
             <a class="navbar-brand" href="/">
+<<<<<<< HEAD
                 <span>Booking</span>Care
+=======
+               <span>Booking</span>Care
+>>>>>>> 603310b5ae8ab5228972e8e4b58b5e7385507c13
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -54,10 +69,17 @@
                         <a class="nav-link" href="/danh-sach/chuyen-khoa"><b>Chuyên khoa</b></a>
                     </li>
                     <li class="nav-item">
+<<<<<<< HEAD
                         <a class="nav-link" href="/danh-sach/co-so-y-te"><b>Cơ sở y tế</b></a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/danh-sach/bac-sy"><b>Bác sĩ</b></a>
+=======
+                        <a class="nav-link" href="/danh-sach/co-so-y-te"><b>Cơ sở y tế<b></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/danh-sach/bac-sy"><b>Bác sĩ<b></a>
+>>>>>>> 603310b5ae8ab5228972e8e4b58b5e7385507c13
                     </li>
                 </ul>
             </div>
@@ -66,8 +88,11 @@
 
     <div class="container mt-5">
         <h5>Danh Sách Chuyên Khoa</h5>
+<<<<<<< HEAD
         
         
+=======
+>>>>>>> 603310b5ae8ab5228972e8e4b58b5e7385507c13
         <div class="row row-cols-lg-4 row-cols-md-3 row-cols-sm-2 g-3 mt-3">
             <li th:each="specialty : ${specialties}" class="col-md-4 mb-4">
                         <a th:href="@{|/danh-sach/chuyen-khoa/${specialty.id}|}" class="text-decoration-none">

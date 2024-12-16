@@ -1,17 +1,13 @@
 <!DOCTYPE html>
 <html lang="vi">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<<<<<<< HEAD
-    <title>Danh Sách Chuyên Khoa</title>
-=======
-    <title>Danh Sách Cơ Sở Y Tế</title>
->>>>>>> 603310b5ae8ab5228972e8e4b58b5e7385507c13
-    
+    <title>Thêm Cơ Sở Y Tế</title>
+    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">  
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <style>
         /* Tùy chỉnh logo */
         .navbar-brand {
@@ -96,24 +92,10 @@
             margin-right: 8px;
             font-size: 18px;
         }
-<<<<<<< HEAD
-             
-        .btn-primary { 
-        white-space: nowrap; /* Ngăn chữ xuống dòng */
-        font-size: 15px;
-        
-    }
-=======
->>>>>>> 603310b5ae8ab5228972e8e4b58b5e7385507c13
     </style>
 </head>
-
 <body>
-<<<<<<< HEAD
- <nav class="navbar navbar-light bg-light navbar-vertical">
-=======
     <nav class="navbar navbar-light bg-light navbar-vertical">
->>>>>>> 603310b5ae8ab5228972e8e4b58b5e7385507c13
         <div class="container-fluid flex-column">
             <a class="navbar-brand" href="#">
                 <span>Admin</span>Care
@@ -160,69 +142,32 @@
 
     <!-- Nội dung chính -->
     <div class="content container mt-5">
-            <div class="table-container">
-<<<<<<< HEAD
-                <h3>Danh sách chuyên khoa</h3>
-                 <div class="d-flex justify-content-between align-items-center mb-3">
-				    <form class="d-flex" method="get" action="/admin/tim-kiem-chuyen-khoa">
-				        <input type="text" name="name" class="form-control me-2" th:value = ${searchName} placeholder="Tìm kiếm chuyên khoa..." value="">
-				        <button type="submit" class="btn btn-primary " >
-				            <i class="bi bi-search"></i> Tìm kiếm
-				        </button>
-				    </form>
-				</div>
-=======
-                <h3>Danh sách cơ sở y tế</h3>
->>>>>>> 603310b5ae8ab5228972e8e4b58b5e7385507c13
-                <table class="table table-striped table-bordered">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-<<<<<<< HEAD
-                            <th>Tên chuyên khoa</th>
-                            <th>Mô tả</th>
-                            <th>Ảnh</th>
-                            <th>Thao tác</th>
-=======
-                            <th>Tên cơ sở</th>
-                            <th>Địa chỉ</th>
-                            <th>Số điện thoại</th>
-                            <th>Chức năng</th>
->>>>>>> 603310b5ae8ab5228972e8e4b58b5e7385507c13
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr th:each="specialty : ${specialty}">
-                            <td th:text="${specialty.id}">ID</td>
-                            <td th:text="${specialty.name}">Tên Chuyên Khoa</td>
-                            <td th:text="${specialty.description}">Mô Tả</td>
-                            <td>
-                                <img th:src="@{|/images/${specialty.logoSpecialty}|}" alt="Logo" class="img-fluid" style="max-width: 50px;">
-                            </td>
-                            <td class="text-center">
-                                <a th:href="@{/admin/sua-chuyen-khoa(id=${specialty.id})}" class="btn btn-warning btn-sm">Sửa</a>
-                                <form th:action="@{/admin/xoa-chuyen-khoa}" method="post" onsubmit="return confirm('Bạn có chắc chắn muốn xóa chuyên khoa này không?');">
-                                    <input type="hidden" name="id" th:value="${specialty.id}">
-                                    <button type="submit" class="btn btn-danger btn-sm">Xóa</button>
-                                </form>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-
-                <!-- Nút Thêm Chuyên Khoa -->
-                <a href="/admin/them-chuyen-khoa" class="btn-add-facility">
-                    <i class="fas fa-plus"></i> Thêm Chuyên Khoa
-                </a>
+            <div class="col-12 col-md-9 content">
+                <h2>Thêm Cơ Sở Y Tế</h2>
+                <form class="mt-4" method="post" action="/admin/them-csyt-thanh-cong">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Tên Cơ Sở Y Tế</label>
+                        <input type="text" class="form-control" id="name" name="name" placeholder="Nhập tên cơ sở y tế" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Mô Tả</label>
+                        <textarea class="form-control" id="description" name="description" rows="3" placeholder="Nhập mô tả" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="address" class="form-label">Địa Chỉ</label>
+                        <input type="text" class="form-control" id="address" name="address" placeholder="Nhập địa chỉ" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="workingTime" class="form-label">Thời Gian Làm Việc</label>
+                        <input type="text" class="form-control" id="workingTime" name="workingTime" placeholder="Nhập thời gian làm việc (VD: 8:00 - 17:00)" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Thêm Mới</button>
+                </form>
             </div>
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
 </body>
-
-<<<<<<< HEAD
 </html>
-=======
-</html>
->>>>>>> 603310b5ae8ab5228972e8e4b58b5e7385507c13

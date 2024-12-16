@@ -59,6 +59,7 @@
         </div>
         <!-- Booking Form -->
         <form action="/dat-lich-kham-thanh-cong" method="get">
+<<<<<<< HEAD
     <!-- Patient Information -->
     <div class="row mb-4">
         <div class="col-md-6">
@@ -133,6 +134,80 @@
         <button type="submit" class="btn btn-primary">Xác nhận đặt lịch</button>
     </div>
 </form>
+=======
+            <!-- Patient Information -->
+            <div class="mb-4">
+                <label for="fullname" class="form-label">Họ và tên bệnh nhân <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" id="fullname" name="fullname" placeholder="Nhập họ và tên đầy đủ" th:value="${registration.fullName}" required>
+            </div>
+            <div class="mb-4">
+                <label class="form-label">Giới tính <span class="text-danger">*</span></label>
+                <div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="gender" id="male" value="Male" th:checked="${registration.gender == 'Male'}" required>
+                        <label class="form-check-label" for="male">Nam</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="gender" id="female" value="Female" th:checked="${registration.gender == 'Female'}">
+                        <label class="form-check-label" for="female">Nữ</label>
+                    </div>
+                </div>
+            </div>
+            <div class="mb-4">
+    <label for="birthday" class="form-label">Ngày sinh <span class="text-danger">*</span></label>
+    <input type="date" class="form-control" id="birthday" name="birthday" th:value="${registration.birthday}" required>
+</div>
+            
+            <div class="mb-4">
+                <label for="phonenumber" class="form-label">Số điện thoại liên hệ <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" id="phonenumber" name="phonenumber" placeholder="Nhập số điện thoại" th:value="${registration.phoneNumber}" required>
+            </div>
+            <div class="mb-4">
+                <label for="email" class="form-label">Địa chỉ email</label>
+                <input type="email" class="form-control" id="email" name="email" placeholder="Nhập email" th:value="${registration.email}">
+            </div>
+
+            <!-- Location Selection -->
+       <div class="row mb-4">
+    <div class="col-md-4">
+        <label for="province" class="form-label">Tỉnh/Thành <span class="text-danger">*</span></label>
+        <input type="text" class="form-control" id="province" name="province" placeholder="Nhập Tỉnh/Thành" required>
+    </div>
+    <div class="col-md-4">
+        <label for="district" class="form-label">Quận/Huyện <span class="text-danger">*</span></label>
+        <input type="text" class="form-control" id="district" name="district" placeholder="Nhập Quận/Huyện" required>
+    </div>
+    <div class="col-md-4">
+        <label for="commune" class="form-label">Phường/Xã <span class="text-danger">*</span></label>
+        <input type="text" class="form-control" id="commune" name="commune" placeholder="Nhập Phường/Xã" required>
+    </div>
+</div>
+
+
+
+
+            <!-- Notes -->
+            <div class="mb-4">
+                <label for="note" class="form-label">Ghi chú</label>
+                <textarea class="form-control" id="note" name="note" rows="3" placeholder="Nhập ghi chú nếu có" th:text="${registration.note}"></textarea>
+            </div>
+
+<!-- Trường ID Bác sĩ -->
+<input type="hidden" id="doctorId" name="doctorId" th:value="${doctor.id}">
+
+<!-- Trường ID Lịch khám -->
+<input type="hidden" id="scheduleId" name="scheduleId" th:value="${schedule.id}">
+
+<!-- Trường Ngày khám -->
+<input type="hidden" id="selectedDay" name="selectedDay" th:value="${selectedDate}">
+
+<!-- Trường Thời gian khám -->
+<input type="hidden" id="timeslotName" name="timeslotName" th:value="${registration.timeslotName}">
+
+            <!-- Submit Button -->
+            <button type="submit" class="btn btn-primary w-100">Xác nhận đặt lịch</button>
+        </form>
+>>>>>>> 603310b5ae8ab5228972e8e4b58b5e7385507c13
     </div>
 
     <!-- Bootstrap JS -->
